@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Guest Studio</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #090a0d;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .app {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* =========================
+       LIVE OUTPUT
+    ========================== */
+
+    .live-wrapper {
+      position: sticky;
+      top: 20px;
+    }
+
+    .live-title {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .live {
+      width: 405px;
+      height: 720px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% 30%, #172340, transparent 35%),
+        radial-gradient(circle at 70% 70%, #20132e, transparent 40%),
+        linear-gradient(180deg, #080a10, #020203);
+      border-radius: 12px;
+      border: 1px solid #292b31;
+    }
+
+    .host {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 52%;
+      height: 100%;
+      overflow: hidden;
+      background: #101116;
+    }
+
+    .host img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .host-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      padding: 30px;
+    }
+
+    .host-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,.65);
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      z-index: 5;
+    }
+
+    .guests {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 48%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      gap: 3px;
+      padding: 3px;
+    }
+
+    .guest {
+      position: relative;
+      overflow: hidden;
+      background: #18191e;
+      border-radius: 7px;
+      border: 1px solid #292b31;
+    }
+
+    .guest img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .guest-empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #555;
+      font-size: 11px;
+    }
+
+    .plus {
+      font-size: 25px;
+      margin-bottom: 4px;
+      color: #777;
+    }
+
+    .guest-name {
+      position: absolute;
+      left: 5px;
+      bottom: 5px;
+      max-width: calc(100% - 10px);
+      padding: 3px 6px;
+      border-radius: 5px;
+      background: rgba(0,0,0,.72);
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: rgba(0,0,0,.7);
+      border-radius: 6px;
+      padding: 3px 5px;
+      font-size: 9px;
+    }
+
+    /* =========================
+       CONTROL PANEL
+    ========================== */
+
+    .panel {
+      width: 620px;
+      background: #111216;
+      border: 1px solid #292b31;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .panel h1 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: #17181d;
+      border: 1px solid #292b31;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .section h2 {
+      font-size: 15px;
+      margin-bottom: 13px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      width: 100%;
+      background: #0d0e12;
+      border: 1px solid #34363e;
+      border-radius: 8px;
+      padding: 11px;
+      color: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #7b68ff;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      color: white;
+      background: #292b32;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #373a44;
+    }
+
+    .primary {
+      background: #705cff;
+    }
+
+    .primary:hover {
+      background: #806eff;
+    }
+
+    .danger {
+      background: #4b2026;
+      color: #ff7d8b;
+    }
+
+    .danger:hover {
+      background: #632832;
+    }
+
+    .avatar-preview {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      background: #0d0e12;
+      border: 1px dashed #444;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #666;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .quick-add {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .quick-fields {
+      flex: 1;
+    }
+
+    .quick-fields input {
+      margin-bottom: 8px;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #777;
+      margin-top: 9px;
+    }
+
+    /* SLOT CARDS */
+
+    .slots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .slot-card {
+      background: #0e0f13;
+      border: 1px solid #2b2d34;
+      border-radius: 9px;
+      padding: 10px;
+      min-height: 80px;
+    }
+
+    .slot-card.active {
+      border-color: #705cff;
+    }
+
+    .slot-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+
+    .slot-number {
+      font-size: 11px;
+      color: #777;
+    }
+
+    .timer {
+      font-size: 12px;
+      color: #7cffad;
+      font-family: monospace;
+    }
+
+    .slot-person {
+      font-size: 13px;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slot-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .slot-actions button {
+      padding: 6px 8px;
+      font-size: 10px;
+      flex: 1;
+    }
+
+    /* GIFTS PLACEHOLDER */
+
+    .gifts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .gift {
+      background: #0e0f13;
+      border: 1px solid #292b31;
+      padding: 12px 5px;
+      text-align: center;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .gift:hover {
+      border-color: #705cff;
+    }
+
+    .gift-icon {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    .gift-name {
+      font-size: 10px;
+      color: #bbb;
+    }
+
+    .selected-info {
+      background: #0e0f13;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .live-wrapper {
+        position: relative;
+        top: 0;
+      }
+
+      .panel {
+        width: min(620px, 100%);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- ================= LIVE OUTPUT ================= -->
+
+  <div class="live-wrapper">
+
+    <div class="live-title">
+      LIVE OUTPUT — 9:16
+    </div>
+
+    <div class="live" id="live">
+
+      <div class="host">
+
+        <div class="host-label">
+          HOST
+        </div>
+
+        <div id="hostContent" class="host-placeholder">
+          Add your host image from the Control Panel
+        </div>
+
+      </div>
+
+      <div class="guests" id="liveGuests"></div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= CONTROL PANEL ================= -->
+
+  <div class="panel">
+
+    <h1>Live Control Panel</h1>
+
+    <div class="subtitle">
+      Host • 8 Guests • 120 sec auto-remove • Gift controls
+    </div>
+
+    <!-- HOST -->
+
+    <div class="section">
+
+      <h2>Host Image</h2>
+
+      <input
+        type="file"
+        id="hostImageInput"
+        accept="image/*"
+      />
+
+    </div>
+
+    <!-- QUICK ADD -->
+
+    <div class="section">
+
+      <h2>Quick Guest Add</h2>
+
+      <div class="quick-add">
+
+        <div
+          class="avatar-preview"
+          id="guestPreview"
+        >
+          AVATAR
+        </div>
+
+        <div class="quick-fields">
+
+          <input
+            type="file"
+            id="guestImageInput"
+            accept="image/*"
+          />
+
+          <input
+            type="text"
+            id="guestName"
+            placeholder="Guest name..."
+          />
+
+          <button
+            class="primary"
+            id="addGuestButton"
+          >
+            ADD GUEST
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="hint">
+        Guest automatically enters the first free slot.
+        Press ENTER after typing the name.
+      </div>
+
+    </div>
+
+    <!-- ACTIVE GUESTS -->
+
+    <div class="section">
+
+      <h2>Active Guests</h2>
+
+      <div
+        class="slots"
+        id="controlSlots"
+      ></div>
+
+    </div>
+
+    <!-- GIFTS -->
+
+    <div class="section">
+
+      <h2>Gift Controls — next stage</h2>
+
+      <div
+        class="selected-info"
+        id="selectedInfo"
+      >
+        Selected guest: none
+      </div>
+
+      <div class="gifts">
+
+        <div class="gift">
+          <div class="gift-icon">🌹</div>
+          <div class="gift-name">Rose</div>
+        </div>
+
+        <div class="gift">
+          <div class="gift-icon">🦁</div>
+          <div class="gift-name">Lion</div>
+        </div>
+
+        <div class="gift">
+          <div class="gift-icon">🌌</div>
+          <div class="gift-name">Universe</div>
+        </div>
+
+        <div class="gift">
+          <div class="gift-icon">🎅</div>
+          <div class="gift-name">Santa</div>
+        </div>
+
+      </div>
+
+      <div class="hint">
+        Gift animations and scores will be connected in the next stage.
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  const MAX_GUESTS = 8;
+  const GUEST_TIME = 120;
+
+  let guests = Array(MAX_GUESTS).fill(null);
+
+  let selectedGuest = null;
+
+  let pendingGuestImage = null;
+
+
+  /* =========================
+     HOST IMAGE
+  ========================== */
+
+  const hostInput =
+    document.getElementById("hostImageInput");
+
+  const hostContent =
+    document.getElementById("hostContent");
+
+
+  hostInput.addEventListener(
+    "change",
+    function(event) {
+
+      const file = event.target.files[0];
+
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+
+        hostContent.innerHTML =
+          `<img src="${e.target.result}">`;
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+  /* =========================
+     GUEST IMAGE
+  ========================== */
+
+  const guestImageInput =
+    document.getElementById("guestImageInput");
+
+  const guestPreview =
+    document.getElementById("guestPreview");
+
+  const guestName =
+    document.getElementById("guestName");
+
+
+  guestImageInput.addEventListener(
+    "change",
+    function(event) {
+
+      const file = event.target.files[0];
+
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+
+        pendingGuestImage =
+          e.target.result;
+
+        guestPreview.innerHTML =
+          `<img src="${pendingGuestImage}">`;
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+  /* =========================
+     ADD GUEST
+  ========================== */
+
+  function addGuest() {
+
+    const name =
+      guestName.value.trim();
+
+    if (!name) {
+
+      alert("Enter guest name");
+
+      return;
+
+    }
+
+    if (!pendingGuestImage) {
+
+      alert("Choose guest image");
+
+      return;
+
+    }
+
+    const freeSlot =
+      guests.findIndex(
+        guest => guest === null
+      );
+
+    if (freeSlot === -1) {
+
+      alert(
+        "All 8 guest slots are occupied."
+      );
+
+      return;
+
+    }
+
+    guests[freeSlot] = {
+
+      name: name,
+
+      image: pendingGuestImage,
+
+      score: 0,
+
+      timeLeft: GUEST_TIME
+
+    };
+
+
+    selectedGuest = freeSlot;
+
+
+    guestName.value = "";
+
+    guestImageInput.value = "";
+
+    pendingGuestImage = null;
+
+    guestPreview.innerHTML =
+      "AVATAR";
+
+
+    renderEverything();
+
+  }
+
+
+  document
+    .getElementById("addGuestButton")
+    .addEventListener(
+      "click",
+      addGuest
+    );
+
+
+  guestName.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        addGuest();
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     REMOVE
+  ========================== */
+
+  function removeGuest(index) {
+
+    guests[index] = null;
+
+    if (selectedGuest === index) {
+
+      selectedGuest = null;
+
+    }
+
+    renderEverything();
+
+  }
+
+
+  /* =========================
+     SELECT
+  ========================== */
+
+  function selectGuest(index) {
+
+    if (!guests[index]) return;
+
+    selectedGuest = index;
+
+    renderEverything();
+
+  }
+
+
+  /* =========================
+     LIVE OUTPUT
+  ========================== */
+
+  function renderLiveGuests() {
+
+    const container =
+      document.getElementById(
+        "liveGuests"
+      );
+
+    container.innerHTML = "";
+
+
+    guests.forEach(
+      (guest, index) => {
+
+        const box =
+          document.createElement("div");
+
+        box.className =
+          "guest";
+
+
+        if (!guest) {
+
+          box.innerHTML = `
+
+            <div class="guest-empty">
+
+              <div class="plus">
+                +
+              </div>
+
+              SLOT ${index + 1}
+
+            </div>
+
+          `;
+
+        }
+
+        else {
+
+          box.innerHTML = `
+
+            <img
+              src="${guest.image}"
+            >
+
+            <div class="score">
+
+              💎 ${guest.score.toLocaleString()}
+
+            </div>
+
+            <div class="guest-name">
+
+              ${escapeHTML(guest.name)}
+
+            </div>
+
+          `;
+
+        }
+
+
+        container.appendChild(box);
+
+      }
+    );
+
+  }
+
+
+  /* =========================
+     CONTROL SLOTS
+  ========================== */
+
+  function renderControlSlots() {
+
+    const container =
+      document.getElementById(
+        "controlSlots"
+      );
+
+    container.innerHTML = "";
+
+
+    guests.forEach(
+      (guest, index) => {
+
+        const card =
+          document.createElement("div");
+
+        card.className =
+          "slot-card";
+
+        if (selectedGuest === index) {
+
+          card.classList.add(
+            "active"
+          );
+
+        }
+
+
+        if (!guest) {
+
+          card.innerHTML = `
+
+            <div class="slot-top">
+
+              <span class="slot-number">
+
+                SLOT ${index + 1}
+
+              </span>
+
+            </div>
+
+            <div
+              class="slot-person"
+              style="color:#555"
+            >
+
+              EMPTY
+
+            </div>
+
+          `;
+
+        }
+
+        else {
+
+          card.innerHTML = `
+
+            <div class="slot-top">
+
+              <span class="slot-number">
+
+                SLOT ${index + 1}
+
+              </span>
+
+              <span class="timer">
+
+                ${formatTime(
+                  guest.timeLeft
+                )}
+
+              </span>
+
+            </div>
+
+
+            <div class="slot-person">
+
+              ${escapeHTML(
+                guest.name
+              )}
+
+            </div>
+
+
+            <div class="slot-actions">
+
+              <button
+                onclick="selectGuest(${index})"
+              >
+
+                SELECT
+
+              </button>
+
+              <button
+                class="danger"
+                onclick="removeGuest(${index})"
+              >
+
+                REMOVE
+
+              </button>
+
+            </div>
+
+          `;
+
+        }
+
+
+        container.appendChild(card);
+
+      }
+    );
+
+  }
+
+
+  /* =========================
+     SELECTED INFO
+  ========================== */
+
+  function renderSelectedInfo() {
+
+    const info =
+      document.getElementById(
+        "selectedInfo"
+      );
+
+
+    if (
+      selectedGuest === null ||
+      !guests[selectedGuest]
+    ) {
+
+      info.textContent =
+        "Selected guest: none";
+
+      return;
+
+    }
+
+
+    const guest =
+      guests[selectedGuest];
+
+
+    info.textContent =
+      `Selected: ${guest.name} — Slot ${selectedGuest + 1}`;
+
+  }
+
+
+  /* =========================
+     TIMER
+  ========================== */
+
+  setInterval(
+    function() {
+
+      let changed = false;
+
+
+      guests.forEach(
+        (guest, index) => {
+
+          if (!guest) return;
+
+
+          guest.timeLeft--;
+
+
+          if (
+            guest.timeLeft <= 0
+          ) {
+
+            guests[index] = null;
+
+            if (
+              selectedGuest === index
+            ) {
+
+              selectedGuest = null;
+
+            }
+
+          }
+
+
+          changed = true;
+
+        }
+      );
+
+
+      if (changed) {
+
+        renderEverything();
+
+      }
+
+    },
+    1000
+  );
+
+
+  /* =========================
+     HELPERS
+  ========================== */
+
+  function formatTime(seconds) {
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
+    const secs =
+      seconds % 60;
+
+
+    return (
+      String(minutes)
+        .padStart(2, "0")
+      +
+      ":"
+      +
+      String(secs)
+        .padStart(2, "0")
+    );
+
+  }
+
+
+  function escapeHTML(text) {
+
+    const div =
+      document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+  }
+
+
+  function renderEverything() {
+
+    renderLiveGuests();
+
+    renderControlSlots();
+
+    renderSelectedInfo();
+
+  }
+
+
+  renderEverything();
+
+</script>
+
+</body>
+</html>
