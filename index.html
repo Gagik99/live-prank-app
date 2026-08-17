@@ -400,6 +400,176 @@
         width: min(620px, 100%);
       }
     }
+  /* =========================
+   GIFT ANIMATION
+========================= */
+
+.gift-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+  overflow: hidden;
+}
+
+.gift-overlay.show {
+  display: block;
+}
+
+.lion-gift {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  left: -260px;
+  top: 42%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 190, 70, 0.55),
+      rgba(255, 120, 20, 0.20) 45%,
+      transparent 72%
+    );
+
+  filter:
+    drop-shadow(
+      0 0 25px rgba(255, 170, 50, 0.7)
+    );
+}
+
+.lion-gift::before {
+  content: "🦁";
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 150px;
+}
+
+.gift-overlay.show .lion-gift {
+  animation:
+    lionMove 6s ease-in-out forwards;
+}
+
+.gift-glow {
+  position: absolute;
+
+  width: 330px;
+  height: 330px;
+
+  left: 50%;
+  top: 45%;
+
+  transform:
+    translate(-50%, -50%) scale(0.2);
+
+  border-radius: 50%;
+
+  opacity: 0;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 210, 100, 0.55),
+      rgba(255, 130, 25, 0.15),
+      transparent 70%
+    );
+}
+
+.gift-overlay.show .gift-glow {
+  animation:
+    giftGlow 6s ease-in-out forwards;
+}
+
+
+/* LION MOVEMENT */
+
+@keyframes lionMove {
+
+  0% {
+    left: -260px;
+
+    transform:
+      translateY(-50%) scale(0.75);
+
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  45% {
+    left: 50%;
+
+    transform:
+      translate(-50%, -50%) scale(1);
+  }
+
+  70% {
+    left: 50%;
+
+    transform:
+      translate(-50%, -50%) scale(1.12);
+  }
+
+  100% {
+    left: 110%;
+
+    transform:
+      translateY(-50%) scale(0.8);
+
+    opacity: 0;
+  }
+
+}
+
+
+/* GOLDEN GLOW */
+
+@keyframes giftGlow {
+
+  0%,
+  25% {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%) scale(0.2);
+  }
+
+  48% {
+
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%) scale(1);
+  }
+
+  75% {
+
+    opacity: 0.8;
+
+    transform:
+      translate(-50%, -50%) scale(1.25);
+  }
+
+  100% {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%) scale(1.6);
+  }
+
+}
+  
   </style>
 </head>
 
@@ -430,6 +600,11 @@
       </div>
 
       <div class="guests" id="liveGuests"></div>
+      
+      <div class="gift-overlay" id="giftOverlay">
+  <div class="gift-glow"></div>
+  <div class="lion-gift"></div>
+</div>
 
     </div>
 
@@ -539,10 +714,10 @@
           <div class="gift-name">Rose</div>
         </div>
 
-        <div class="gift">
-          <div class="gift-icon">🦁</div>
-          <div class="gift-name">Lion</div>
-        </div>
+        <div class="gift" onclick="sendLionGift()">
+  <div class="gift-icon">🦁</div>
+  <div class="gift-name">Lion<br>35,000</div>
+</div>
 
         <div class="gift">
           <div class="gift-icon">🌌</div>
@@ -1118,7 +1293,85 @@
 
   }
 
+/* =========================
+   GIFT ENGINE
+========================= */
 
+const giftQueue = [];
+
+let giftPlaying = false;
+
+
+function sendLionGift() {
+
+  if (
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ) {
+    alert("First select a guest");
+    return;
+  }
+
+  const targetSlot = selectedGuest;
+
+  // Add 35,000 to selected guest
+  guests[targetSlot].score += 35000;
+
+  renderEverything();
+
+  // Every click becomes a separate gift event
+  giftQueue.push({
+    type: "lion",
+    slot: targetSlot
+  });
+
+  processGiftQueue();
+}
+
+
+function processGiftQueue() {
+
+  // If animation is already playing,
+  // wait until it finishes.
+  if (giftPlaying) return;
+
+  // Nothing left in queue
+  if (giftQueue.length === 0) return;
+
+  giftPlaying = true;
+
+  const gift = giftQueue.shift();
+
+  if (gift.type === "lion") {
+    playLionAnimation();
+  }
+}
+
+
+function playLionAnimation() {
+
+  const overlay =
+    document.getElementById("giftOverlay");
+
+  // Restart animation
+  overlay.classList.remove("show");
+
+  void overlay.offsetWidth;
+
+  overlay.classList.add("show");
+
+  // Animation duration = 6 seconds
+  setTimeout(function() {
+
+    overlay.classList.remove("show");
+
+    giftPlaying = false;
+
+    // Start next gift in queue
+    processGiftQueue();
+
+  }, 6000);
+}
   renderEverything();
 
 </script>
