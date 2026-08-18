@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Live Guest Studio</title>
 
 <style>
-
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-html,
-body{
-    min-height:100%;
-    background:#08090d;
-    color:white;
-    font-family:Arial,Helvetica,sans-serif;
+html,body{
+  min-height:100%;
+  background:#08090d;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-button,
-input{
-    font:inherit;
+button,input{
+  font:inherit;
 }
 
 button{
-    cursor:pointer;
+  cursor:pointer;
 }
 
 /* =========================
@@ -38,36 +32,36 @@ button{
 ========================= */
 
 .app{
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    gap:24px;
-    padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:24px;
+  padding:20px;
 }
 
 .live-side{
-    position:sticky;
-    top:20px;
+  position:sticky;
+  top:20px;
 }
 
 .live-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
 }
 
 .live-header span{
-    font-size:12px;
-    color:#858892;
+  font-size:12px;
+  color:#858892;
 }
 
 .open-output{
-    background:#181a20;
-    border:1px solid #343740;
-    color:#fff;
-    padding:8px 12px;
-    border-radius:8px;
+  background:#181a20;
+  border:1px solid #343740;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:8px;
 }
 
 /* =========================
@@ -75,19 +69,13 @@ button{
 ========================= */
 
 .live{
-    position:relative;
-
-    width:405px;
-    height:720px;
-
-    background:#08090c;
-
-    overflow:hidden;
-
-    border-radius:12px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.45);
+  position:relative;
+  width:405px;
+  height:720px;
+  background:#08090c;
+  overflow:hidden;
+  border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
 /* =========================
@@ -95,257 +83,212 @@ button{
 ========================= */
 
 .host{
-    position:absolute;
+  position:absolute;
+  left:0;
+  top:0;
+  width:58%;
+  height:72%;
+  background:#111319;
+  overflow:hidden;
+  z-index:2;
 
-    left:0;
-    top:0;
+  /* blue speaking glow */
+  border:2px solid rgba(71,191,255,.95);
+  animation:hostSpeakingGlow .52s ease-in-out infinite alternate;
+}
 
-    width:58%;
-    height:72%;
+@keyframes hostSpeakingGlow{
+  0%{
+    border-color:rgba(55,164,255,.55);
+    box-shadow:
+      inset 0 0 8px rgba(48,169,255,.35),
+      0 0 5px rgba(48,169,255,.35);
+  }
 
-    background:#111319;
-
-    overflow:hidden;
+  100%{
+    border-color:rgba(111,220,255,1);
+    box-shadow:
+      inset 0 0 18px rgba(71,194,255,.95),
+      0 0 18px rgba(55,182,255,.95),
+      0 0 28px rgba(40,130,255,.55);
+  }
 }
 
 .host img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-    object-position:center;
-
-    display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
 }
 
 .host-placeholder{
-    width:100%;
-    height:100%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    color:#656872;
-
-    background:
-        radial-gradient(circle at 40% 30%,#1d2742,transparent 35%),
-        radial-gradient(circle at 60% 75%,#2b172e,transparent 40%),
-        #0b0c10;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#656872;
+  background:
+    radial-gradient(circle at 40% 30%,#1d2742,transparent 35%),
+    radial-gradient(circle at 60% 75%,#2b172e,transparent 40%),
+    #0b0c10;
 }
 
 .host-label{
-    position:absolute;
-
-    left:8px;
-    top:8px;
-
-    background:rgba(0,0,0,.60);
-
-    padding:4px 7px;
-
-    border-radius:5px;
-
-    font-size:10px;
-
-    backdrop-filter:blur(5px);
+  position:absolute;
+  left:8px;
+  top:8px;
+  z-index:4;
+  background:rgba(0,0,0,.60);
+  padding:4px 7px;
+  border-radius:5px;
+  font-size:10px;
+  backdrop-filter:blur(5px);
 }
 
 /* =========================
-   GUEST GRID
+   GUESTS
 ========================= */
 
 .guests{
-    position:absolute;
-
-    right:0;
-    top:0;
-
-    width:42%;
-    height:72%;
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:repeat(4,1fr);
-
-    gap:2px;
-
-    background:#050608;
+  position:absolute;
+  right:0;
+  top:0;
+  width:42%;
+  height:72%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(4,1fr);
+  gap:2px;
+  background:#050608;
+  z-index:3;
 }
 
 .guest{
-    position:relative;
-
-    overflow:hidden;
-
-    background:#17191f;
-
-    border:1px solid rgba(255,255,255,.08);
+  position:relative;
+  overflow:hidden;
+  background:#17191f;
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .guest.selected{
+  border:2px solid #53c9ff;
+  animation:selectedGuestGlow .65s ease-in-out infinite alternate;
+}
+
+@keyframes selectedGuestGlow{
+  from{
     box-shadow:
-        inset 0 0 0 2px rgba(175,145,255,.95);
+      inset 0 0 5px rgba(60,190,255,.4),
+      0 0 3px rgba(60,190,255,.25);
+  }
+
+  to{
+    box-shadow:
+      inset 0 0 12px rgba(71,202,255,.9),
+      0 0 12px rgba(71,202,255,.8);
+  }
 }
 
 .guest img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
 .guest::after{
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:45%;
-
-    background:
-        linear-gradient(
-            transparent,
-            rgba(0,0,0,.72)
-        );
-
-    pointer-events:none;
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:45%;
+  background:linear-gradient(transparent,rgba(0,0,0,.72));
+  pointer-events:none;
 }
 
-/* SCORE */
-
 .guest-score{
-    position:absolute;
-
-    left:4px;
-    top:4px;
-
-    z-index:3;
-
-    display:flex;
-    align-items:center;
-    gap:3px;
-
-    padding:3px 5px;
-
-    border-radius:5px;
-
-    background:rgba(0,0,0,.68);
-
-    backdrop-filter:blur(4px);
-
-    font-size:8px;
-
-    font-weight:bold;
+  position:absolute;
+  left:4px;
+  top:4px;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  padding:3px 5px;
+  border-radius:5px;
+  background:rgba(0,0,0,.68);
+  backdrop-filter:blur(4px);
+  font-size:8px;
+  font-weight:bold;
 }
 
 .score-icon{
-    width:10px;
-    height:10px;
-
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:50%;
-
-    background:#65e6ff;
-
-    color:white;
-
-    font-size:6px;
+  width:10px;
+  height:10px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#65e6ff;
+  color:white;
+  font-size:6px;
 }
 
-/* NAME */
-
 .guest-name{
-    position:absolute;
-
-    left:5px;
-    right:23px;
-    bottom:5px;
-
-    z-index:4;
-
-    font-size:8px;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-
-    text-shadow:
-        0 1px 3px #000;
+  position:absolute;
+  left:5px;
+  right:23px;
+  bottom:5px;
+  z-index:5;
+  font-size:8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-shadow:0 1px 3px #000;
 }
 
 .guest-plus{
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:12px;
-    height:12px;
-
-    margin-left:3px;
-
-    border-radius:50%;
-
-    background:#767981;
-
-    color:white;
-
-    font-size:9px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:12px;
+  height:12px;
+  margin-left:3px;
+  border-radius:50%;
+  background:#767981;
+  color:white;
+  font-size:9px;
 }
-
-/* MUTED */
 
 .guest-muted{
-    position:absolute;
-
-    right:5px;
-    bottom:5px;
-
-    z-index:5;
-
-    color:white;
-
-    font-size:12px;
-
-    text-shadow:
-        0 1px 4px #000;
+  position:absolute;
+  right:5px;
+  bottom:5px;
+  z-index:6;
+  color:white;
+  font-size:13px;
+  text-shadow:0 1px 4px #000;
 }
 
-/* EMPTY SLOT */
-
 .guest-empty{
-    width:100%;
-    height:100%;
-
-    display:flex;
-    flex-direction:column;
-
-    align-items:center;
-    justify-content:center;
-
-    gap:5px;
-
-    color:#666;
-
-    font-size:8px;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  color:#666;
+  font-size:8px;
 }
 
 .empty-plus{
-    font-size:27px;
-    color:#999;
+  font-size:27px;
+  color:#999;
 }
 
 /* =========================
@@ -353,22 +296,13 @@ button{
 ========================= */
 
 .bottom-zone{
-    position:absolute;
-
-    left:0;
-    bottom:0;
-
-    width:100%;
-    height:28%;
-
-    overflow:hidden;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(7,8,11,.90),
-            #050608
-        );
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:100%;
+  height:28%;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(7,8,11,.90),#050608);
 }
 
 /* =========================
@@ -376,102 +310,73 @@ button{
 ========================= */
 
 .comments{
-    position:absolute;
-
-    inset:0;
-
-    padding:12px;
-
-    z-index:5;
-
-    transition:
-        opacity .2s ease,
-        transform .2s ease;
+  position:absolute;
+  inset:0;
+  padding:12px;
+  z-index:5;
+  transition:opacity .2s ease,transform .2s ease;
 }
 
 .comments.hidden{
-    opacity:0;
-
-    transform:
-        translateY(10px);
-
-    pointer-events:none;
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
 }
 
 .comment{
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:6px;
-
-    margin-bottom:7px;
-
-    font-size:10px;
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  margin-bottom:7px;
+  font-size:10px;
 }
 
 .comment-avatar{
-    width:21px;
-    height:21px;
-
-    flex-shrink:0;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:#30333d;
-
-    font-size:8px;
+  width:21px;
+  height:21px;
+  flex-shrink:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#30333d;
+  font-size:8px;
 }
 
 .comment-user{
-    color:#a9abb3;
-
-    font-weight:bold;
+  color:#a9abb3;
+  font-weight:bold;
 }
 
 .comment-text{
-    line-height:1.3;
+  line-height:1.3;
 }
 
 /* =========================
-   GIFT VIDEO AREA
+   GIFT VIDEO
 ========================= */
 
 .gift-stage{
-    position:absolute;
-
-    inset:0;
-
-    z-index:10;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    background:#000;
-
-    transition:
-        opacity .15s ease;
+  position:absolute;
+  inset:0;
+  z-index:10;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  background:#000;
 }
 
 .gift-stage.active{
-    opacity:1;
+  opacity:1;
+  visibility:visible;
 }
 
-.gift-stage video{
-    width:100%;
-    height:100%;
-
-    display:block;
-
-    object-fit:cover;
-
-    background:#000;
+#lionVideo{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  background:#000;
 }
 
 /* =========================
@@ -479,721 +384,520 @@ button{
 ========================= */
 
 .panel{
-    width:650px;
-
-    padding:18px;
-
-    border-radius:14px;
-
-    border:1px solid #292c34;
-
-    background:#111217;
+  width:650px;
+  padding:18px;
+  border-radius:14px;
+  border:1px solid #292c34;
+  background:#111217;
 }
 
 .panel h1{
-    font-size:21px;
-
-    margin-bottom:5px;
+  font-size:21px;
+  margin-bottom:5px;
 }
 
 .subtitle{
-    color:#81848d;
-
-    font-size:12px;
-
-    margin-bottom:18px;
+  color:#81848d;
+  font-size:12px;
+  margin-bottom:18px;
 }
 
 .section{
-    padding:15px;
-
-    margin-bottom:14px;
-
-    border-radius:11px;
-
-    border:1px solid #292c34;
-
-    background:#17181e;
+  padding:15px;
+  margin-bottom:14px;
+  border-radius:11px;
+  border:1px solid #292c34;
+  background:#17181e;
 }
 
 .section h2{
-    font-size:15px;
-
-    margin-bottom:12px;
+  font-size:15px;
+  margin-bottom:12px;
 }
 
-/* INPUT */
-
 input{
-    width:100%;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    border:1px solid #363943;
-
-    background:#0d0e12;
-
-    color:#fff;
-
-    outline:none;
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #363943;
+  background:#0d0e12;
+  color:#fff;
+  outline:none;
 }
 
 input:focus{
-    border-color:#826fff;
+  border-color:#826fff;
 }
 
-/* BUTTON */
-
 button{
-    padding:9px 12px;
-
-    border:none;
-
-    border-radius:8px;
-
-    color:white;
-
-    background:#2b2e36;
-
-    font-weight:bold;
+  padding:9px 12px;
+  border:none;
+  border-radius:8px;
+  color:white;
+  background:#2b2e36;
+  font-weight:bold;
 }
 
 button:hover{
-    background:#393d48;
+  background:#393d48;
 }
 
 .primary{
-    background:#735dff;
+  background:#735dff;
 }
 
 .primary:hover{
-    background:#826eff;
+  background:#826eff;
 }
 
 .danger{
-    background:#4c2028;
-
-    color:#ff8491;
+  background:#4c2028;
+  color:#ff8491;
 }
 
-/* =========================
-   QUICK ADD
-========================= */
+/* QUICK ADD */
 
 .quick-add{
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
 .avatar-preview{
-    width:78px;
-    height:78px;
-
-    flex-shrink:0;
-
-    overflow:hidden;
-
-    border-radius:9px;
-
-    border:1px dashed #484b55;
-
-    background:#0d0e12;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    color:#676a72;
-
-    font-size:10px;
+  width:78px;
+  height:78px;
+  flex-shrink:0;
+  overflow:hidden;
+  border-radius:9px;
+  border:1px dashed #484b55;
+  background:#0d0e12;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#676a72;
+  font-size:10px;
 }
 
 .avatar-preview img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .quick-fields{
-    flex:1;
+  flex:1;
 }
 
 .quick-fields input{
-    margin-bottom:8px;
+  margin-bottom:8px;
 }
 
 .hint{
-    margin-top:8px;
-
-    color:#777b84;
-
-    font-size:11px;
-
-    line-height:1.4;
+  margin-top:8px;
+  color:#777b84;
+  font-size:11px;
+  line-height:1.4;
 }
 
-/* =========================
-   ACTIVE SLOTS
-========================= */
+/* SLOTS */
 
 .slots{
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
 .slot-card{
-    min-height:92px;
-
-    padding:10px;
-
-    border-radius:9px;
-
-    border:1px solid #2d3038;
-
-    background:#0e0f13;
+  min-height:92px;
+  padding:10px;
+  border-radius:9px;
+  border:1px solid #2d3038;
+  background:#0e0f13;
 }
 
 .slot-card.active{
-    border-color:#826eff;
-
-    box-shadow:
-        0 0 0 1px rgba(130,110,255,.25);
+  border-color:#826eff;
+  box-shadow:0 0 0 1px rgba(130,110,255,.25);
 }
 
 .slot-top{
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:7px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:7px;
 }
 
 .slot-number{
-    color:#777b84;
-
-    font-size:10px;
+  color:#777b84;
+  font-size:10px;
 }
 
 .timer{
-    color:#70f5a2;
-
-    font-family:monospace;
-
-    font-size:12px;
+  color:#70f5a2;
+  font-family:monospace;
+  font-size:12px;
 }
 
 .slot-person{
-    margin-bottom:8px;
-
-    font-size:13px;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+  margin-bottom:8px;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .slot-actions{
-    display:flex;
-
-    gap:6px;
+  display:flex;
+  gap:6px;
 }
 
 .slot-actions button{
-    flex:1;
-
-    padding:6px;
-
-    font-size:10px;
+  flex:1;
+  padding:6px;
+  font-size:10px;
 }
 
-/* =========================
-   GIFTS
-========================= */
+/* GIFTS */
 
 .selected-info{
-    padding:10px;
-
-    margin-bottom:10px;
-
-    border-radius:8px;
-
-    background:#0e0f13;
-
-    color:#aaa;
-
-    font-size:12px;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:8px;
+  background:#0e0f13;
+  color:#aaa;
+  font-size:12px;
 }
 
 .gifts{
-    display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap:8px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
 }
 
 .gift{
-    padding:12px 5px;
-
-    border-radius:10px;
-
-    border:1px solid #2c2f37;
-
-    background:#0e0f13;
-
-    text-align:center;
-
-    cursor:pointer;
-
-    transition:.15s ease;
+  padding:12px 5px;
+  border-radius:10px;
+  border:1px solid #2c2f37;
+  background:#0e0f13;
+  text-align:center;
+  cursor:pointer;
+  transition:.15s ease;
 }
 
 .gift:hover{
-    border-color:#806cff;
-
-    transform:
-        translateY(-2px);
+  border-color:#806cff;
+  transform:translateY(-2px);
 }
 
 .gift-icon{
-    margin-bottom:5px;
-
-    font-size:27px;
+  margin-bottom:5px;
+  font-size:27px;
 }
 
 .gift-name{
-    font-size:11px;
+  font-size:11px;
 }
 
 .gift-value{
-    margin-top:4px;
-
-    color:#8c8f98;
-
-    font-size:9px;
+  margin-top:4px;
+  color:#8c8f98;
+  font-size:9px;
 }
 
-/* =========================
-   OUTPUT MODE
-========================= */
+.queue-status{
+  margin-top:10px;
+  padding:8px;
+  border-radius:7px;
+  background:#0c0d10;
+  color:#8e929b;
+  font-size:10px;
+}
+
+/* OUTPUT */
 
 body.output-mode{
-    margin:0;
-
-    overflow:hidden;
-
-    background:#000;
+  margin:0;
+  overflow:hidden;
+  background:#000;
 }
 
 body.output-mode .app{
-    width:100vw;
-    height:100vh;
-
-    padding:0;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
+  width:100vw;
+  height:100vh;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 body.output-mode .panel,
 body.output-mode .live-header{
-    display:none;
+  display:none;
 }
 
 body.output-mode .live-side{
-    position:static;
+  position:static;
 }
 
 body.output-mode .live{
-    height:100vh;
-
-    width:56.25vh;
-
-    max-width:100vw;
-
-    max-height:177.777vw;
-
-    border-radius:0;
+  height:100vh;
+  width:56.25vh;
+  max-width:100vw;
+  max-height:177.777vw;
+  border-radius:0;
 }
-
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media(max-width:1100px){
+  .app{
+    flex-direction:column;
+    align-items:center;
+  }
 
-    .app{
-        flex-direction:column;
+  .live-side{
+    position:relative;
+    top:0;
+  }
 
-        align-items:center;
-    }
-
-    .live-side{
-        position:relative;
-
-        top:0;
-    }
-
-    .panel{
-        width:min(650px,100%);
-    }
-
+  .panel{
+    width:min(650px,100%);
+  }
 }
-
 </style>
-
 </head>
 
 <body>
 
 <div class="app">
 
-<!-- =========================
-     LIVE OUTPUT
-========================= -->
-
 <div class="live-side">
 
 <div class="live-header">
+  <span>LIVE OUTPUT — 9:16</span>
 
-<span>
-LIVE OUTPUT — 9:16
-</span>
-
-<button
-class="open-output"
-onclick="openOutputWindow()"
->
-OPEN CLEAN OUTPUT
-</button>
-
+  <button
+    class="open-output"
+    onclick="openOutputWindow()"
+  >
+    OPEN CLEAN OUTPUT
+  </button>
 </div>
 
-<div
-class="live"
-id="live"
->
+<div class="live">
 
 <!-- HOST -->
 
 <div class="host">
 
-<div
-id="hostContent"
-class="host-placeholder"
->
-Add Host Image
-</div>
+  <div
+    id="hostContent"
+    class="host-placeholder"
+  >
+    Add Host Image
+  </div>
 
-<div class="host-label">
-Host
-</div>
+  <div class="host-label">
+    Host
+  </div>
 
 </div>
 
 <!-- GUESTS -->
 
 <div
-class="guests"
-id="liveGuests"
->
-</div>
+  class="guests"
+  id="liveGuests"
+></div>
 
 <!-- BOTTOM -->
 
 <div class="bottom-zone">
 
-<!-- COMMENTS -->
+  <div
+    class="comments"
+    id="comments"
+  >
 
-<div
-class="comments"
-id="comments"
->
+    <div class="comment">
+      <div class="comment-avatar">A</div>
+      <div class="comment-text">
+        <span class="comment-user">Arman</span><br>
+        Hello 👋
+      </div>
+    </div>
 
-<div class="comment">
+    <div class="comment">
+      <div class="comment-avatar">M</div>
+      <div class="comment-text">
+        <span class="comment-user">Mariam</span><br>
+        🔥🔥🔥
+      </div>
+    </div>
 
-<div class="comment-avatar">
-A
-</div>
+    <div class="comment">
+      <div class="comment-avatar">G</div>
+      <div class="comment-text">
+        <span class="comment-user">Gor</span><br>
+        Nice live!
+      </div>
+    </div>
 
-<div class="comment-text">
+  </div>
 
-<span class="comment-user">
-Arman
-</span>
+  <!-- IMPORTANT:
+       ONE persistent video element.
+       It is NEVER recreated on another click.
+  -->
 
-<br>
-
-Hello 👋
-
-</div>
-
-</div>
-
-<div class="comment">
-
-<div class="comment-avatar">
-M
-</div>
-
-<div class="comment-text">
-
-<span class="comment-user">
-Mariam
-</span>
-
-<br>
-
-🔥🔥🔥
-
-</div>
-
-</div>
-
-<div class="comment">
-
-<div class="comment-avatar">
-G
-</div>
-
-<div class="comment-text">
-
-<span class="comment-user">
-Gor
-</span>
-
-<br>
-
-Nice live!
+  <div
+    class="gift-stage"
+    id="giftStage"
+  >
+    <video
+      id="lionVideo"
+      src="./0818%20(1).mp4"
+      preload="auto"
+      playsinline
+    ></video>
+  </div>
 
 </div>
 
 </div>
-
 </div>
 
-<!-- VIDEO AREA -->
-
-<div
-class="gift-stage"
-id="giftStage"
->
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- =========================
-     CONTROL PANEL
-========================= -->
+<!-- CONTROL PANEL -->
 
 <div class="panel">
 
-<h1>
-Live Control Panel
-</h1>
+<h1>Live Control Panel</h1>
 
 <div class="subtitle">
-Host • 8 Guests • 120 sec • Gift Queue
+Host • 8 Guests • 120 sec • Safe Gift Queue
 </div>
-
-<!-- HOST -->
 
 <div class="section">
 
-<h2>
-Host Image
-</h2>
+<h2>Host Image</h2>
 
 <input
-type="file"
-id="hostImageInput"
-accept="image/*"
+  type="file"
+  id="hostImageInput"
+  accept="image/*"
 >
 
 </div>
 
-<!-- QUICK ADD -->
-
 <div class="section">
 
-<h2>
-Quick Guest Add
-</h2>
+<h2>Quick Guest Add</h2>
 
 <div class="quick-add">
 
-<div
-class="avatar-preview"
-id="guestPreview"
->
-AVATAR
-</div>
+  <div
+    class="avatar-preview"
+    id="guestPreview"
+  >
+    AVATAR
+  </div>
 
-<div class="quick-fields">
+  <div class="quick-fields">
 
-<input
-type="file"
-id="guestImageInput"
-accept="image/*"
->
+    <input
+      type="file"
+      id="guestImageInput"
+      accept="image/*"
+    >
 
-<input
-type="text"
-id="guestName"
-placeholder="Guest name..."
->
+    <input
+      type="text"
+      id="guestName"
+      placeholder="Guest name..."
+    >
 
-<button
-class="primary"
-id="addGuestButton"
->
-ADD GUEST
-</button>
+    <button
+      class="primary"
+      id="addGuestButton"
+    >
+      ADD GUEST
+    </button>
 
-</div>
+  </div>
 
 </div>
 
 <div class="hint">
 Նկար → անուն → ENTER։
-Հյուրը ավտոմատ ավելանում է առաջին ազատ slot-ում։
 </div>
 
 </div>
-
-<!-- GUESTS -->
 
 <div class="section">
 
-<h2>
-Active Guests
-</h2>
+<h2>Active Guests</h2>
 
 <div
-class="slots"
-id="controlSlots"
->
-</div>
+  class="slots"
+  id="controlSlots"
+></div>
 
 </div>
-
-<!-- GIFTS -->
 
 <div class="section">
 
-<h2>
-Gift Controls
-</h2>
+<h2>Gift Controls</h2>
 
 <div
-class="selected-info"
-id="selectedInfo"
+  class="selected-info"
+  id="selectedInfo"
 >
 Selected guest: none
 </div>
 
 <div class="gifts">
 
-<div
-class="gift"
-onclick="sendGift('rose')"
->
+  <div
+    class="gift"
+    onclick="sendGift('rose')"
+  >
+    <div class="gift-icon">🌹</div>
+    <div class="gift-name">Rose</div>
+    <div class="gift-value">1</div>
+  </div>
 
-<div class="gift-icon">
-🌹
-</div>
+  <div
+    class="gift"
+    onclick="sendGift('lion')"
+  >
+    <div class="gift-icon">🦁</div>
+    <div class="gift-name">Lion</div>
+    <div class="gift-value">29,999</div>
+  </div>
 
-<div class="gift-name">
-Rose
-</div>
+  <div
+    class="gift"
+    onclick="sendGift('universe')"
+  >
+    <div class="gift-icon">🌌</div>
+    <div class="gift-name">Universe</div>
+    <div class="gift-value">44,999</div>
+  </div>
 
-<div class="gift-value">
-1
-</div>
-
-</div>
-
-<div
-class="gift"
-onclick="sendGift('lion')"
->
-
-<div class="gift-icon">
-🦁
-</div>
-
-<div class="gift-name">
-Lion
-</div>
-
-<div class="gift-value">
-29,999
-</div>
-
-</div>
-
-<div
-class="gift"
-onclick="sendGift('universe')"
->
-
-<div class="gift-icon">
-🌌
-</div>
-
-<div class="gift-name">
-Universe
-</div>
-
-<div class="gift-value">
-44,999
-</div>
+  <div
+    class="gift"
+    onclick="sendGift('santa')"
+  >
+    <div class="gift-icon">🎅</div>
+    <div class="gift-name">Santa</div>
+    <div class="gift-value">25,000</div>
+  </div>
 
 </div>
 
 <div
-class="gift"
-onclick="sendGift('santa')"
+  class="queue-status"
+  id="queueStatus"
 >
-
-<div class="gift-icon">
-🎅
-</div>
-
-<div class="gift-name">
-Santa
-</div>
-
-<div class="gift-value">
-25,000
-</div>
-
-</div>
-
-</div>
-
-<div class="hint">
-Lion-ի յուրաքանչյուր սեղմումը առանձին event է։
-Եթե նախորդ Lion-ը դեռ խաղում է, հաջորդը հերթում կսպասի։
+Lion queue: 0
 </div>
 
 </div>
@@ -1209,27 +913,13 @@ Lion-ի յուրաքանչյուր սեղմումը առանձին event է։
 ========================= */
 
 const MAX_GUESTS = 8;
-
 const GUEST_DURATION = 120;
 
 const GIFTS = {
-
-    rose:{
-        value:1
-    },
-
-    lion:{
-        value:29999
-    },
-
-    universe:{
-        value:44999
-    },
-
-    santa:{
-        value:25000
-    }
-
+  rose:{ value:1 },
+  lion:{ value:29999 },
+  universe:{ value:44999 },
+  santa:{ value:25000 }
 };
 
 /* =========================
@@ -1237,120 +927,92 @@ const GIFTS = {
 ========================= */
 
 let guests =
-    Array(MAX_GUESTS).fill(null);
+  Array(MAX_GUESTS).fill(null);
 
 let selectedGuest = null;
-
 let pendingGuestImage = null;
-
 let hostImage = null;
 
+/*
+  Robust Lion queue.
+  Each click = one integer in queue.
+*/
+
+let pendingLions = 0;
+let lionCurrentlyPlaying = false;
+
 /* =========================
-   LION QUEUE
-========================= */
-
-let lionQueue = 0;
-
-let lionPlaying = false;
-
-/* =========================
-   OUTPUT COMMUNICATION
+   OUTPUT MODE
 ========================= */
 
 const channel =
-    new BroadcastChannel(
-        "live_guest_studio_final"
-    );
+  new BroadcastChannel(
+    "live_guest_studio_queue_v3"
+  );
 
 const params =
-    new URLSearchParams(
-        location.search
-    );
+  new URLSearchParams(
+    location.search
+  );
 
 const outputMode =
-    params.get("mode") === "output";
+  params.get("mode") === "output";
 
 if(outputMode){
-
-    document.body.classList.add(
-        "output-mode"
-    );
-
+  document.body.classList.add(
+    "output-mode"
+  );
 }
 
 /* =========================
-   OPEN OUTPUT
+   OUTPUT WINDOW
 ========================= */
 
 function openOutputWindow(){
 
-    window.open(
+  window.open(
+    location.pathname + "?mode=output",
+    "liveOutput",
+    "width=520,height=920"
+  );
 
-        location.pathname +
-        "?mode=output",
-
-        "liveOutput",
-
-        "width=520,height=920"
-
-    );
-
-    setTimeout(
-        broadcastState,
-        600
-    );
-
+  setTimeout(
+    broadcastState,
+    700
+  );
 }
-
-/* =========================
-   CHANNEL
-========================= */
 
 channel.onmessage =
 function(event){
 
-    const message =
-        event.data;
+  const m = event.data;
 
-    if(
-        outputMode &&
-        message.type === "state"
-    ){
+  if(
+    outputMode &&
+    m.type === "state"
+  ){
+    applyRemoteState(m.state);
+  }
 
-        applyRemoteState(
-            message.state
-        );
+  if(
+    outputMode &&
+    m.type === "enqueueLion"
+  ){
+    enqueueLion(false);
+  }
 
-    }
-
-    if(
-        outputMode &&
-        message.type === "lion"
-    ){
-
-        playLionVideo(
-            false
-        );
-
-    }
-
-    if(
-        !outputMode &&
-        message.type === "requestState"
-    ){
-
-        broadcastState();
-
-    }
-
+  if(
+    !outputMode &&
+    m.type === "requestState"
+  ){
+    broadcastState();
+  }
 };
 
 if(outputMode){
-
-    channel.postMessage({
-        type:"requestState"
-    });
-
+  channel.postMessage({
+    type:"requestState"
+  });
 }
 
 /* =========================
@@ -1359,42 +1021,33 @@ if(outputMode){
 
 function broadcastState(){
 
-    if(outputMode) return;
+  if(outputMode) return;
 
-    channel.postMessage({
+  channel.postMessage({
+    type:"state",
 
-        type:"state",
-
-        state:{
-
-            guests,
-
-            selectedGuest,
-
-            hostImage
-
-        }
-
-    });
-
+    state:{
+      guests,
+      selectedGuest,
+      hostImage
+    }
+  });
 }
 
 function applyRemoteState(state){
 
-    guests =
-        state.guests ||
-        Array(MAX_GUESTS).fill(null);
+  guests =
+    state.guests ||
+    Array(MAX_GUESTS).fill(null);
 
-    selectedGuest =
-        state.selectedGuest;
+  selectedGuest =
+    state.selectedGuest;
 
-    hostImage =
-        state.hostImage;
+  hostImage =
+    state.hostImage;
 
-    renderHost();
-
-    renderLiveGuests();
-
+  renderHost();
+  renderLiveGuests();
 }
 
 /* =========================
@@ -1402,71 +1055,63 @@ function applyRemoteState(state){
 ========================= */
 
 const hostInput =
-    document.getElementById(
-        "hostImageInput"
-    );
+  document.getElementById(
+    "hostImageInput"
+  );
 
 if(hostInput){
 
-    hostInput.addEventListener(
-        "change",
-        function(event){
+  hostInput.addEventListener(
+    "change",
+    function(event){
 
-            const file =
-                event.target.files[0];
+      const file =
+        event.target.files[0];
 
-            if(!file) return;
+      if(!file) return;
 
-            const reader =
-                new FileReader();
+      const reader =
+        new FileReader();
 
-            reader.onload =
-            function(e){
+      reader.onload =
+      function(e){
 
-                hostImage =
-                    e.target.result;
+        hostImage =
+          e.target.result;
 
-                renderHost();
+        renderHost();
+        broadcastState();
+      };
 
-                broadcastState();
-
-            };
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
-
+      reader.readAsDataURL(file);
+    }
+  );
 }
 
 function renderHost(){
 
-    const hostContent =
-        document.getElementById(
-            "hostContent"
-        );
+  const target =
+    document.getElementById(
+      "hostContent"
+    );
 
-    if(!hostContent) return;
+  if(!target) return;
 
-    if(!hostImage){
+  if(!hostImage){
 
-        hostContent.className =
-            "host-placeholder";
+    target.className =
+      "host-placeholder";
 
-        hostContent.innerHTML =
-            "Add Host Image";
+    target.innerHTML =
+      "Add Host Image";
 
-        return;
+    return;
+  }
 
-    }
+  target.className = "";
 
-    hostContent.className = "";
-
-    hostContent.innerHTML =
-        `<img src="${hostImage}">`;
-
+  target.innerHTML =
+    `<img src="${hostImage}">`;
 }
 
 /* =========================
@@ -1474,107 +1119,84 @@ function renderHost(){
 ========================= */
 
 const guestImageInput =
-    document.getElementById(
-        "guestImageInput"
-    );
+  document.getElementById(
+    "guestImageInput"
+  );
 
 const guestPreview =
-    document.getElementById(
-        "guestPreview"
-    );
+  document.getElementById(
+    "guestPreview"
+  );
 
 const guestName =
-    document.getElementById(
-        "guestName"
-    );
+  document.getElementById(
+    "guestName"
+  );
 
 if(guestImageInput){
 
-    guestImageInput.addEventListener(
-        "change",
-        function(event){
+  guestImageInput.addEventListener(
+    "change",
+    function(event){
 
-            const file =
-                event.target.files[0];
+      const file =
+        event.target.files[0];
 
-            if(!file) return;
-
-            loadGuestImage(
-                file
-            );
-
-        }
-    );
-
+      if(file){
+        loadGuestImage(file);
+      }
+    }
+  );
 }
 
 function loadGuestImage(file){
 
-    const reader =
-        new FileReader();
+  const reader =
+    new FileReader();
 
-    reader.onload =
-    function(e){
+  reader.onload =
+  function(e){
 
-        pendingGuestImage =
-            e.target.result;
+    pendingGuestImage =
+      e.target.result;
 
-        if(guestPreview){
+    if(guestPreview){
+      guestPreview.innerHTML =
+        `<img src="${pendingGuestImage}">`;
+    }
+  };
 
-            guestPreview.innerHTML =
-                `<img src="${pendingGuestImage}">`;
-
-        }
-
-    };
-
-    reader.readAsDataURL(
-        file
-    );
-
+  reader.readAsDataURL(file);
 }
 
-/* =========================
-   PASTE SCREENSHOT
-========================= */
+/* paste screenshot */
 
 document.addEventListener(
-    "paste",
-    function(event){
+  "paste",
+  function(event){
 
-        if(outputMode) return;
+    if(outputMode) return;
 
-        const items =
-            event.clipboardData?.items;
+    const items =
+      event.clipboardData?.items;
 
-        if(!items) return;
+    if(!items) return;
 
-        for(
-            const item
-            of items
-        ){
+    for(const item of items){
 
-            if(
-                item.type &&
-                item.type.startsWith(
-                    "image/"
-                )
-            ){
+      if(
+        item.type &&
+        item.type.startsWith("image/")
+      ){
 
-                const file =
-                    item.getAsFile();
+        const file =
+          item.getAsFile();
 
-                loadGuestImage(
-                    file
-                );
-
-                break;
-
-            }
-
-        }
-
+        loadGuestImage(file);
+        break;
+      }
     }
+  }
 );
 
 /* =========================
@@ -1583,153 +1205,103 @@ document.addEventListener(
 
 function addGuest(){
 
-    if(outputMode) return;
+  if(outputMode) return;
 
-    const name =
-        guestName.value.trim();
+  const name =
+    guestName.value.trim();
 
-    if(!name){
+  if(!name){
+    alert("Enter guest name");
+    return;
+  }
 
-        alert(
-            "Enter guest name"
-        );
+  if(!pendingGuestImage){
+    alert("Choose guest image");
+    return;
+  }
 
-        return;
+  const slot =
+    guests.findIndex(
+      g => g === null
+    );
 
-    }
+  if(slot === -1){
+    alert("All 8 slots are occupied");
+    return;
+  }
 
-    if(!pendingGuestImage){
+  guests[slot] = {
+    name,
+    image:pendingGuestImage,
+    score:0,
+    expiresAt:
+      Date.now() +
+      GUEST_DURATION * 1000
+  };
 
-        alert(
-            "Choose or paste guest image"
-        );
+  selectedGuest = slot;
 
-        return;
+  guestName.value = "";
+  guestImageInput.value = "";
 
-    }
+  pendingGuestImage = null;
 
-    const freeSlot =
-        guests.findIndex(
-            guest =>
-                guest === null
-        );
+  guestPreview.innerHTML =
+    "AVATAR";
 
-    if(freeSlot === -1){
-
-        alert(
-            "All 8 slots are occupied"
-        );
-
-        return;
-
-    }
-
-    guests[freeSlot] = {
-
-        name:name,
-
-        image:
-            pendingGuestImage,
-
-        score:0,
-
-        expiresAt:
-            Date.now() +
-            GUEST_DURATION * 1000
-
-    };
-
-    selectedGuest =
-        freeSlot;
-
-    guestName.value = "";
-
-    guestImageInput.value = "";
-
-    pendingGuestImage = null;
-
-    guestPreview.innerHTML =
-        "AVATAR";
-
-    renderEverything();
-
-    broadcastState();
-
+  renderEverything();
+  broadcastState();
 }
 
-const addGuestButton =
-    document.getElementById(
-        "addGuestButton"
-    );
+const addButton =
+  document.getElementById(
+    "addGuestButton"
+  );
 
-if(addGuestButton){
-
-    addGuestButton.addEventListener(
-        "click",
-        addGuest
-    );
-
+if(addButton){
+  addButton.addEventListener(
+    "click",
+    addGuest
+  );
 }
 
 if(guestName){
 
-    guestName.addEventListener(
-        "keydown",
-        function(event){
+  guestName.addEventListener(
+    "keydown",
+    function(event){
 
-            if(
-                event.key ===
-                "Enter"
-            ){
-
-                addGuest();
-
-            }
-
-        }
-    );
-
+      if(event.key === "Enter"){
+        addGuest();
+      }
+    }
+  );
 }
 
 /* =========================
-   SELECT
+   SELECT / REMOVE
 ========================= */
 
 function selectGuest(index){
 
-    if(!guests[index])
-        return;
+  if(!guests[index]) return;
 
-    selectedGuest =
-        index;
+  selectedGuest = index;
 
-    renderEverything();
-
-    broadcastState();
-
+  renderEverything();
+  broadcastState();
 }
-
-/* =========================
-   REMOVE
-========================= */
 
 function removeGuest(index){
 
-    guests[index] = null;
+  guests[index] = null;
 
-    if(
-        selectedGuest ===
-        index
-    ){
+  if(selectedGuest === index){
+    selectedGuest = null;
+  }
 
-        selectedGuest = null;
-
-    }
-
-    renderEverything();
-
-    broadcastState();
-
+  renderEverything();
+  broadcastState();
 }
 
 /* =========================
@@ -1738,104 +1310,70 @@ function removeGuest(index){
 
 function renderLiveGuests(){
 
-    const container =
-        document.getElementById(
-            "liveGuests"
-        );
-
-    if(!container) return;
-
-    container.innerHTML = "";
-
-    guests.forEach(
-        (guest,index)=>{
-
-            const box =
-                document.createElement(
-                    "div"
-                );
-
-            box.className =
-                "guest";
-
-            if(
-                guest &&
-                selectedGuest === index
-            ){
-
-                box.classList.add(
-                    "selected"
-                );
-
-            }
-
-            if(!guest){
-
-                box.innerHTML = `
-
-                    <div class="guest-empty">
-
-                        <div class="empty-plus">
-                            +
-                        </div>
-
-                        <div>
-                            Request
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-
-            else{
-
-                box.innerHTML = `
-
-                    <img src="${guest.image}">
-
-                    <div class="guest-score">
-
-                        <span class="score-icon">
-                            ◆
-                        </span>
-
-                        <span>
-                            ${Number(
-                                guest.score
-                            ).toLocaleString()}
-                        </span>
-
-                    </div>
-
-                    <div class="guest-name">
-
-                        ${escapeHTML(
-                            guest.name
-                        )}
-
-                        <span class="guest-plus">
-                            +
-                        </span>
-
-                    </div>
-
-                    <div class="guest-muted">
-                        ♫̸
-                    </div>
-
-                `;
-
-            }
-
-            container.appendChild(
-                box
-            );
-
-        }
+  const container =
+    document.getElementById(
+      "liveGuests"
     );
 
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  guests.forEach(
+    (guest,index)=>{
+
+      const box =
+        document.createElement("div");
+
+      box.className =
+        "guest";
+
+      if(
+        guest &&
+        selectedGuest === index
+      ){
+        box.classList.add(
+          "selected"
+        );
+      }
+
+      if(!guest){
+
+        box.innerHTML = `
+          <div class="guest-empty">
+            <div class="empty-plus">+</div>
+            <div>Request</div>
+          </div>
+        `;
+      }
+      else{
+
+        box.innerHTML = `
+          <img src="${guest.image}">
+
+          <div class="guest-score">
+            <span class="score-icon">◆</span>
+            <span>
+              ${Number(
+                guest.score
+              ).toLocaleString()}
+            </span>
+          </div>
+
+          <div class="guest-name">
+            ${escapeHTML(guest.name)}
+            <span class="guest-plus">+</span>
+          </div>
+
+          <div class="guest-muted">
+            🎙̸
+          </div>
+        `;
+      }
+
+      container.appendChild(box);
+    }
+  );
 }
 
 /* =========================
@@ -1844,162 +1382,130 @@ function renderLiveGuests(){
 
 function renderControlSlots(){
 
-    const container =
-        document.getElementById(
-            "controlSlots"
-        );
-
-    if(!container) return;
-
-    container.innerHTML = "";
-
-    guests.forEach(
-        (guest,index)=>{
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "slot-card";
-
-            if(
-                selectedGuest === index
-            ){
-
-                card.classList.add(
-                    "active"
-                );
-
-            }
-
-            if(!guest){
-
-                card.innerHTML = `
-
-                    <div class="slot-top">
-
-                        <span class="slot-number">
-                            SLOT ${index + 1}
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="slot-person"
-                        style="color:#555"
-                    >
-                        EMPTY
-                    </div>
-
-                `;
-
-            }
-
-            else{
-
-                const timeLeft =
-                    Math.max(
-
-                        0,
-
-                        Math.ceil(
-
-                            (
-                                guest.expiresAt -
-                                Date.now()
-                            ) / 1000
-
-                        )
-
-                    );
-
-                card.innerHTML = `
-
-                    <div class="slot-top">
-
-                        <span class="slot-number">
-                            SLOT ${index + 1}
-                        </span>
-
-                        <span class="timer">
-                            ${formatTime(
-                                timeLeft
-                            )}
-                        </span>
-
-                    </div>
-
-                    <div class="slot-person">
-
-                        ${escapeHTML(
-                            guest.name
-                        )}
-
-                    </div>
-
-                    <div class="slot-actions">
-
-                        <button
-                            onclick="selectGuest(${index})"
-                        >
-                            SELECT
-                        </button>
-
-                        <button
-                            class="danger"
-                            onclick="removeGuest(${index})"
-                        >
-                            REMOVE
-                        </button>
-
-                    </div>
-
-                `;
-
-            }
-
-            container.appendChild(
-                card
-            );
-
-        }
+  const container =
+    document.getElementById(
+      "controlSlots"
     );
 
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  guests.forEach(
+    (guest,index)=>{
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "slot-card";
+
+      if(
+        selectedGuest === index
+      ){
+        card.classList.add(
+          "active"
+        );
+      }
+
+      if(!guest){
+
+        card.innerHTML = `
+          <div class="slot-top">
+            <span class="slot-number">
+              SLOT ${index + 1}
+            </span>
+          </div>
+
+          <div
+            class="slot-person"
+            style="color:#555"
+          >
+            EMPTY
+          </div>
+        `;
+      }
+      else{
+
+        const timeLeft =
+          Math.max(
+            0,
+            Math.ceil(
+              (
+                guest.expiresAt -
+                Date.now()
+              ) / 1000
+            )
+          );
+
+        card.innerHTML = `
+          <div class="slot-top">
+
+            <span class="slot-number">
+              SLOT ${index + 1}
+            </span>
+
+            <span class="timer">
+              ${formatTime(timeLeft)}
+            </span>
+
+          </div>
+
+          <div class="slot-person">
+            ${escapeHTML(guest.name)}
+          </div>
+
+          <div class="slot-actions">
+
+            <button
+              onclick="selectGuest(${index})"
+            >
+              SELECT
+            </button>
+
+            <button
+              class="danger"
+              onclick="removeGuest(${index})"
+            >
+              REMOVE
+            </button>
+
+          </div>
+        `;
+      }
+
+      container.appendChild(card);
+    }
+  );
 }
 
 /* =========================
-   SELECTED INFO
+   SELECTED
 ========================= */
 
 function renderSelectedInfo(){
 
-    const info =
-        document.getElementById(
-            "selectedInfo"
-        );
+  const info =
+    document.getElementById(
+      "selectedInfo"
+    );
 
-    if(!info) return;
+  if(!info) return;
 
-    if(
-        selectedGuest === null ||
-        !guests[selectedGuest]
-    ){
-
-        info.textContent =
-            "Selected guest: none";
-
-        return;
-
-    }
-
+  if(
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ){
     info.textContent =
-        "Selected: " +
-        guests[selectedGuest].name +
-        " — Slot " +
-        (selectedGuest + 1);
+      "Selected guest: none";
+    return;
+  }
 
+  info.textContent =
+    "Selected: " +
+    guests[selectedGuest].name +
+    " — Slot " +
+    (selectedGuest + 1);
 }
 
 /* =========================
@@ -2008,233 +1514,274 @@ function renderSelectedInfo(){
 
 function sendGift(type){
 
-    if(outputMode) return;
+  if(outputMode) return;
 
-    if(
-        selectedGuest === null ||
-        !guests[selectedGuest]
-    ){
+  if(
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ){
+    alert("First select a guest");
+    return;
+  }
 
-        alert(
-            "First select a guest"
-        );
+  const gift =
+    GIFTS[type];
 
-        return;
+  if(!gift) return;
 
-    }
+  /*
+    Score adds immediately.
+  */
 
-    const gift =
-        GIFTS[type];
+  guests[selectedGuest].score +=
+    gift.value;
 
-    if(!gift) return;
+  renderEverything();
+  broadcastState();
 
-    /*
-      Score changes immediately
-      with EVERY click.
-    */
-
-    guests[selectedGuest].score +=
-        gift.value;
-
-    renderEverything();
-
-    broadcastState();
+  if(type === "lion"){
 
     /*
-      Lion video
+      Add ONE lion locally.
     */
 
-    if(type === "lion"){
-
-        playLionVideo(
-            true
-        );
-
-    }
-
+    enqueueLion(true);
+  }
 }
 
 /* =========================
-   LION QUEUE
+   ROBUST LION QUEUE
 ========================= */
 
-function playLionVideo(
-    notifyOutput = true
-){
+function enqueueLion(notifyOutput){
 
-    /*
-      Every click adds ONE
-      Lion to the queue.
-    */
+  /*
+    IMPORTANT:
+    Only increase the queue counter.
+    Never touch video.currentTime here.
+  */
 
-    lionQueue++;
+  pendingLions++;
 
-    /*
-      Tell clean output window
-      to queue one Lion too.
-    */
+  updateQueueStatus();
 
-    if(
-        notifyOutput &&
-        !outputMode
-    ){
+  if(
+    notifyOutput &&
+    !outputMode
+  ){
+    channel.postMessage({
+      type:"enqueueLion"
+    });
+  }
 
-        channel.postMessage({
-            type:"lion"
-        });
+  /*
+    If something is already playing,
+    stop here.
+  */
 
-    }
+  if(lionCurrentlyPlaying){
+    return;
+  }
 
-    /*
-      If Lion is already playing,
-      DO NOT restart it.
-    */
-
-    if(lionPlaying){
-
-        return;
-
-    }
-
-    playNextLion();
-
+  startNextLion();
 }
 
 /* =========================
-   PLAY NEXT LION
+   PLAY EXACTLY ONE
 ========================= */
 
-function playNextLion(){
+function startNextLion(){
 
-    if(lionQueue <= 0){
+  if(pendingLions <= 0){
 
-        lionPlaying = false;
+    lionCurrentlyPlaying = false;
 
-        return;
+    endLionMode();
 
-    }
+    updateQueueStatus();
 
-    lionPlaying = true;
+    return;
+  }
 
-    lionQueue--;
+  lionCurrentlyPlaying = true;
 
-    const comments =
-        document.getElementById(
-            "comments"
-        );
+  pendingLions--;
 
-    const stage =
-        document.getElementById(
-            "giftStage"
-        );
+  updateQueueStatus();
 
-    if(!stage){
-
-        lionPlaying = false;
-
-        return;
-
-    }
-
-    if(comments){
-
-        comments.classList.add(
-            "hidden"
-        );
-
-    }
-
-    stage.innerHTML = "";
-
-    const video =
-        document.createElement(
-            "video"
-        );
-
-    /*
-      Lion video uploaded
-      to GitHub repository.
-    */
-
-    video.src =
-        "./0818%20(1).mp4";
-
-    video.autoplay = true;
-
-    video.playsInline = true;
-
-    video.muted = false;
-
-    video.preload =
-        "auto";
-
-    video.style.width =
-        "100%";
-
-    video.style.height =
-        "100%";
-
-    video.style.objectFit =
-        "cover";
-
-    video.style.display =
-        "block";
-
-    stage.appendChild(
-        video
+  const stage =
+    document.getElementById(
+      "giftStage"
     );
 
-    stage.classList.add(
-        "active"
+  const comments =
+    document.getElementById(
+      "comments"
     );
 
-    video.play().catch(
-        function(error){
-
-            console.error(
-                "Lion video error:",
-                error
-            );
-
-        }
+  const video =
+    document.getElementById(
+      "lionVideo"
     );
 
-    /*
-      When current Lion ends:
-      play next Lion if queued.
-    */
+  if(
+    !stage ||
+    !video
+  ){
 
-    video.onended =
+    lionCurrentlyPlaying = false;
+    return;
+  }
+
+  /*
+    Keep comments hidden while
+    ANY lion remains in the sequence.
+  */
+
+  if(comments){
+    comments.classList.add(
+      "hidden"
+    );
+  }
+
+  stage.classList.add(
+    "active"
+  );
+
+  /*
+    This currentTime reset happens ONLY
+    when we intentionally start the NEXT
+    item from the queue.
+    Never on an extra click.
+  */
+
+  video.pause();
+
+  video.currentTime = 0;
+
+  const playPromise =
+    video.play();
+
+  if(playPromise){
+
+    playPromise.catch(
+      function(error){
+
+        console.error(
+          "Lion play error:",
+          error
+        );
+
+        /*
+          Prevent queue deadlock
+          if playback fails.
+        */
+
+        lionCurrentlyPlaying = false;
+
+      }
+    );
+  }
+}
+
+/* =========================
+   SINGLE ENDED HANDLER
+========================= */
+
+/*
+  Register only ONE handler once.
+  It cannot be replaced on each click.
+*/
+
+const persistentLionVideo =
+  document.getElementById(
+    "lionVideo"
+  );
+
+if(persistentLionVideo){
+
+  persistentLionVideo.addEventListener(
+    "ended",
     function(){
 
-        stage.innerHTML = "";
+      /*
+        Current item finished.
+      */
 
-        if(lionQueue > 0){
+      lionCurrentlyPlaying = false;
 
-            playNextLion();
+      /*
+        If another Lion is waiting,
+        start it NOW.
+      */
 
-        }
+      if(pendingLions > 0){
 
-        else{
+        startNextLion();
 
-            lionPlaying = false;
+      }
+      else{
 
-            stage.classList.remove(
-                "active"
-            );
+        endLionMode();
 
-            if(comments){
+      }
 
-                comments.classList.remove(
-                    "hidden"
-                );
+      updateQueueStatus();
 
-            }
+    }
+  );
+}
 
-        }
+/* =========================
+   END LION MODE
+========================= */
 
-    };
+function endLionMode(){
 
+  const stage =
+    document.getElementById(
+      "giftStage"
+    );
+
+  const comments =
+    document.getElementById(
+      "comments"
+    );
+
+  if(stage){
+    stage.classList.remove(
+      "active"
+    );
+  }
+
+  if(comments){
+    comments.classList.remove(
+      "hidden"
+    );
+  }
+}
+
+/* =========================
+   QUEUE STATUS
+========================= */
+
+function updateQueueStatus(){
+
+  const status =
+    document.getElementById(
+      "queueStatus"
+    );
+
+  if(!status) return;
+
+  status.textContent =
+    "Lion queue: " +
+    pendingLions +
+    (
+      lionCurrentlyPlaying
+        ? " • playing"
+        : ""
+    );
 }
 
 /* =========================
@@ -2242,58 +1789,45 @@ function playNextLion(){
 ========================= */
 
 setInterval(
-    function(){
+  function(){
 
-        if(outputMode)
-            return;
+    if(outputMode) return;
 
-        let changed =
-            false;
+    let changed = false;
 
-        guests.forEach(
-            (guest,index)=>{
+    guests.forEach(
+      (guest,index)=>{
 
-                if(!guest)
-                    return;
+        if(!guest) return;
 
-                if(
-                    Date.now() >=
-                    guest.expiresAt
-                ){
+        if(
+          Date.now() >=
+          guest.expiresAt
+        ){
 
-                    guests[index] =
-                        null;
+          guests[index] = null;
 
-                    if(
-                        selectedGuest ===
-                        index
-                    ){
+          if(
+            selectedGuest === index
+          ){
+            selectedGuest = null;
+          }
 
-                        selectedGuest =
-                            null;
-
-                    }
-
-                    changed =
-                        true;
-
-                }
-
-            }
-        );
-
-        renderControlSlots();
-
-        if(changed){
-
-            renderEverything();
-
-            broadcastState();
-
+          changed = true;
         }
+      }
+    );
 
-    },
-    500
+    renderControlSlots();
+
+    if(changed){
+
+      renderEverything();
+      broadcastState();
+    }
+
+  },
+  500
 );
 
 /* =========================
@@ -2301,39 +1835,31 @@ setInterval(
 ========================= */
 
 document.addEventListener(
-    "keydown",
-    function(event){
+  "keydown",
+  function(event){
 
-        if(outputMode)
-            return;
+    if(outputMode) return;
 
-        if(
-            document.activeElement &&
-            document.activeElement.tagName ===
-            "INPUT"
-        ){
-
-            return;
-
-        }
-
-        const number =
-            Number(
-                event.key
-            );
-
-        if(
-            number >= 1 &&
-            number <= 8
-        ){
-
-            selectGuest(
-                number - 1
-            );
-
-        }
-
+    if(
+      document.activeElement &&
+      document.activeElement.tagName ===
+      "INPUT"
+    ){
+      return;
     }
+
+    const number =
+      Number(event.key);
+
+    if(
+      number >= 1 &&
+      number <= 8
+    ){
+      selectGuest(
+        number - 1
+      );
+    }
+  }
 );
 
 /* =========================
@@ -2342,48 +1868,29 @@ document.addEventListener(
 
 function formatTime(seconds){
 
-    const min =
-        Math.floor(
-            seconds / 60
-        );
+  const min =
+    Math.floor(seconds / 60);
 
-    const sec =
-        seconds % 60;
+  const sec =
+    seconds % 60;
 
-    return(
-
-        String(min).padStart(
-            2,
-            "0"
-        )
-
-        +
-
-        ":"
-
-        +
-
-        String(sec).padStart(
-            2,
-            "0"
-        )
-
-    );
-
+  return(
+    String(min).padStart(2,"0")
+    +
+    ":"
+    +
+    String(sec).padStart(2,"0")
+  );
 }
 
 function escapeHTML(text){
 
-    const div =
-        document.createElement(
-            "div"
-        );
+  const div =
+    document.createElement("div");
 
-    div.textContent =
-        text;
+  div.textContent = text;
 
-    return div.innerHTML;
-
+  return div.innerHTML;
 }
 
 /* =========================
@@ -2392,14 +1899,11 @@ function escapeHTML(text){
 
 function renderEverything(){
 
-    renderHost();
-
-    renderLiveGuests();
-
-    renderControlSlots();
-
-    renderSelectedInfo();
-
+  renderHost();
+  renderLiveGuests();
+  renderControlSlots();
+  renderSelectedInfo();
+  updateQueueStatus();
 }
 
 renderEverything();
@@ -2407,5 +1911,4 @@ renderEverything();
 </script>
 
 </body>
-
 </html>
