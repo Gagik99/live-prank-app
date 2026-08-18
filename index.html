@@ -1,623 +1,952 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live Guest Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Guest Studio</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: #090a0d;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .app {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    /* =========================
-       LIVE OUTPUT
-    ========================== */
-
-    .live-wrapper {
-      position: sticky;
-      top: 20px;
-    }
-
-    .live-title {
-      margin-bottom: 10px;
-      font-size: 14px;
-      color: #999;
-    }
-
-    .live {
-      width: 405px;
-      height: 720px;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 30% 30%, #172340, transparent 35%),
-        radial-gradient(circle at 70% 70%, #20132e, transparent 40%),
-        linear-gradient(180deg, #080a10, #020203);
-      border-radius: 12px;
-      border: 1px solid #292b31;
-    }
-
-    .host {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 52%;
-      height: 100%;
-      overflow: hidden;
-      background: #101116;
-    }
-
-    .host img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .host-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: #666;
-      font-size: 14px;
-      padding: 30px;
-    }
-
-    .host-label {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0,0,0,.65);
-      padding: 5px 9px;
-      border-radius: 8px;
-      font-size: 12px;
-      z-index: 5;
-    }
-
-    .guests {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 48%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(4, 1fr);
-      gap: 3px;
-      padding: 3px;
-    }
-
-    .guest {
-      position: relative;
-      overflow: hidden;
-      background: #18191e;
-      border-radius: 7px;
-      border: 1px solid #292b31;
-    }
-
-    .guest img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .guest-empty {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #555;
-      font-size: 11px;
-    }
-
-    .plus {
-      font-size: 25px;
-      margin-bottom: 4px;
-      color: #777;
-    }
-
-    .guest-name {
-      position: absolute;
-      left: 5px;
-      bottom: 5px;
-      max-width: calc(100% - 10px);
-      padding: 3px 6px;
-      border-radius: 5px;
-      background: rgba(0,0,0,.72);
-      font-size: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .score {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      background: rgba(0,0,0,.7);
-      border-radius: 6px;
-      padding: 3px 5px;
-      font-size: 9px;
-    }
-
-    /* =========================
-       CONTROL PANEL
-    ========================== */
-
-    .panel {
-      width: 620px;
-      background: #111216;
-      border: 1px solid #292b31;
-      border-radius: 14px;
-      padding: 18px;
-    }
-
-    .panel h1 {
-      font-size: 21px;
-      margin-bottom: 5px;
-    }
-
-    .subtitle {
-      color: #777;
-      font-size: 12px;
-      margin-bottom: 20px;
-    }
-
-    .section {
-      background: #17181d;
-      border: 1px solid #292b31;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-
-    .section h2 {
-      font-size: 15px;
-      margin-bottom: 13px;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-    }
-
-    input {
-      width: 100%;
-      background: #0d0e12;
-      border: 1px solid #34363e;
-      border-radius: 8px;
-      padding: 11px;
-      color: white;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #7b68ff;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      cursor: pointer;
-      color: white;
-      background: #292b32;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #373a44;
-    }
-
-    .primary {
-      background: #705cff;
-    }
-
-    .primary:hover {
-      background: #806eff;
-    }
-
-    .danger {
-      background: #4b2026;
-      color: #ff7d8b;
-    }
-
-    .danger:hover {
-      background: #632832;
-    }
-
-    .avatar-preview {
-      width: 70px;
-      height: 70px;
-      border-radius: 10px;
-      background: #0d0e12;
-      border: 1px dashed #444;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      color: #666;
-      font-size: 10px;
-      flex-shrink: 0;
-    }
-
-    .avatar-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .quick-add {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .quick-fields {
-      flex: 1;
-    }
-
-    .quick-fields input {
-      margin-bottom: 8px;
-    }
-
-    .hint {
-      font-size: 11px;
-      color: #777;
-      margin-top: 9px;
-    }
-
-    /* SLOT CARDS */
-
-    .slots {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-    }
-
-    .slot-card {
-      background: #0e0f13;
-      border: 1px solid #2b2d34;
-      border-radius: 9px;
-      padding: 10px;
-      min-height: 80px;
-    }
-
-    .slot-card.active {
-      border-color: #705cff;
-    }
-
-    .slot-top {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 7px;
-    }
-
-    .slot-number {
-      font-size: 11px;
-      color: #777;
-    }
-
-    .timer {
-      font-size: 12px;
-      color: #7cffad;
-      font-family: monospace;
-    }
-
-    .slot-person {
-      font-size: 13px;
-      margin-bottom: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .slot-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .slot-actions button {
-      padding: 6px 8px;
-      font-size: 10px;
-      flex: 1;
-    }
-
-    /* GIFTS PLACEHOLDER */
-
-    .gifts {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .gift {
-      background: #0e0f13;
-      border: 1px solid #292b31;
-      padding: 12px 5px;
-      text-align: center;
-      border-radius: 9px;
-      cursor: pointer;
-    }
-
-    .gift:hover {
-      border-color: #705cff;
-    }
-
-    .gift-icon {
-      font-size: 25px;
-      margin-bottom: 5px;
-    }
-
-    .gift-name {
-      font-size: 10px;
-      color: #bbb;
-    }
-
-    .selected-info {
-      background: #0e0f13;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-      color: #aaa;
-      font-size: 12px;
-    }
-
-    @media (max-width: 1100px) {
-      .app {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .live-wrapper {
-        position: relative;
-        top: 0;
-      }
-
-      .panel {
-        width: min(620px, 100%);
-      }
-    }
-  /* =========================
-   GIFT ANIMATION
-========================= */
-
-.gift-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  display: none;
-  overflow: hidden;
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-.gift-overlay.show {
-  display: block;
+html,body{
+  min-height:100%;
+  background:#08090c;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-.lion-gift {
-  position: absolute;
-  width: 230px;
-  height: 230px;
-  left: -260px;
-  top: 42%;
-  transform: translateY(-50%);
-  border-radius: 50%;
+button,input{
+  font:inherit;
+}
 
+button{
+  cursor:pointer;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.app{
+  display:flex;
+  gap:24px;
+  justify-content:center;
+  align-items:flex-start;
+  padding:20px;
+}
+
+.live-side{
+  position:sticky;
+  top:20px;
+}
+
+.live-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.live-header span{
+  font-size:13px;
+  color:#8a8d96;
+}
+
+.open-output{
+  border:1px solid #343741;
+  background:#16181e;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:8px;
+}
+
+/* =====================================================
+   9:16 LIVE OUTPUT
+===================================================== */
+
+.live{
+  position:relative;
+  width:405px;
+  height:720px;
+  overflow:hidden;
+  background:#050609;
+  border-radius:12px;
+}
+
+/* HOST */
+
+.host{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  background:#090a0d;
+}
+
+.host img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+
+.host-placeholder{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#555;
+  padding:40px;
   background:
-    radial-gradient(
-      circle,
-      rgba(255, 190, 70, 0.55),
-      rgba(255, 120, 20, 0.20) 45%,
-      transparent 72%
-    );
+    radial-gradient(circle at 35% 35%,#18213a,transparent 35%),
+    radial-gradient(circle at 70% 70%,#21152d,transparent 40%),
+    #08090c;
+}
 
+/* Dark area behind guest side only */
+
+.guest-backdrop{
+  position:absolute;
+  right:0;
+  top:0;
+  width:43%;
+  height:100%;
+  background:rgba(5,6,9,.50);
+  backdrop-filter:blur(2px);
+  z-index:2;
+}
+
+/* GUEST GRID */
+
+.guests{
+  position:absolute;
+  right:4px;
+  top:4px;
+  bottom:4px;
+  width:42%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(4,1fr);
+  gap:4px;
+  z-index:3;
+}
+
+.guest{
+  position:relative;
+  overflow:hidden;
+  border-radius:7px;
+  background:#18191e;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+
+.guest.selected{
+  outline:2px solid rgba(169,132,255,.9);
+}
+
+.guest img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.guest-empty{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#555;
+  font-size:10px;
+  background:rgba(18,19,24,.85);
+}
+
+.guest-empty .plus{
+  font-size:24px;
+  margin-bottom:3px;
+}
+
+.guest-name{
+  position:absolute;
+  left:4px;
+  right:4px;
+  bottom:4px;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);
+  border-radius:4px;
+  padding:3px 5px;
+  font-size:9px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.score{
+  position:absolute;
+  top:4px;
+  left:4px;
+  background:rgba(0,0,0,.70);
+  backdrop-filter:blur(4px);
+  border-radius:5px;
+  padding:3px 5px;
+  font-size:9px;
+  font-weight:bold;
+}
+
+/* =====================================================
+   GIFT OVERLAY
+===================================================== */
+
+.gift-overlay{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  pointer-events:none;
+  overflow:hidden;
+  display:none;
+}
+
+.gift-overlay.show{
+  display:block;
+}
+
+/* common */
+
+.gift-darken{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  background:radial-gradient(circle at center,transparent 15%,rgba(0,0,0,.45) 100%);
+}
+
+.gift-overlay.show .gift-darken{
+  animation:darken 5.8s ease forwards;
+}
+
+@keyframes darken{
+  0%,100%{opacity:0}
+  25%,75%{opacity:1}
+}
+
+/* ---------------- LION ---------------- */
+
+.lion-animation{
+  position:absolute;
+  inset:0;
+  display:none;
+}
+
+.gift-overlay.lion .lion-animation{
+  display:block;
+}
+
+.lion-light{
+  position:absolute;
+  width:380px;
+  height:380px;
+  border-radius:50%;
+  left:50%;
+  top:46%;
+  transform:translate(-50%,-50%) scale(.1);
+  opacity:0;
+  background:
+    radial-gradient(circle,
+      rgba(255,220,125,.80),
+      rgba(218,139,38,.30) 38%,
+      transparent 70%);
+}
+
+.gift-overlay.show .lion-light{
+  animation:lionLight 5.8s ease forwards;
+}
+
+.lion-body{
+  position:absolute;
+  left:-230px;
+  top:37%;
+  width:230px;
+  height:230px;
+  transform:translateY(-50%);
   filter:
-    drop-shadow(
-      0 0 25px rgba(255, 170, 50, 0.7)
-    );
+    drop-shadow(0 10px 25px rgba(0,0,0,.6))
+    drop-shadow(0 0 22px rgba(255,177,61,.6));
 }
 
-.lion-gift::before {
-  content: "🦁";
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 150px;
-}
-
-.gift-overlay.show .lion-gift {
-  animation:
-    lionMove 6s ease-in-out forwards;
-}
-
-.gift-glow {
-  position: absolute;
-
-  width: 330px;
-  height: 330px;
-
-  left: 50%;
-  top: 45%;
-
-  transform:
-    translate(-50%, -50%) scale(0.2);
-
-  border-radius: 50%;
-
-  opacity: 0;
-
+.lion-head{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:150px;
   background:
-    radial-gradient(
-      circle,
-      rgba(255, 210, 100, 0.55),
-      rgba(255, 130, 25, 0.15),
-      transparent 70%
-    );
+    radial-gradient(circle at center,
+      rgba(255,194,71,.22),
+      rgba(120,65,8,.15),
+      transparent 68%);
 }
 
-.gift-overlay.show .gift-glow {
-  animation:
-    giftGlow 6s ease-in-out forwards;
+.gift-overlay.show .lion-body{
+  animation:lionMove 5.8s cubic-bezier(.2,.75,.25,1) forwards;
 }
 
-
-/* LION MOVEMENT */
-
-@keyframes lionMove {
-
-  0% {
-    left: -260px;
-
-    transform:
-      translateY(-50%) scale(0.75);
-
-    opacity: 0;
-  }
-
-  15% {
-    opacity: 1;
-  }
-
-  45% {
-    left: 50%;
-
-    transform:
-      translate(-50%, -50%) scale(1);
-  }
-
-  70% {
-    left: 50%;
-
-    transform:
-      translate(-50%, -50%) scale(1.12);
-  }
-
-  100% {
-    left: 110%;
-
-    transform:
-      translateY(-50%) scale(0.8);
-
-    opacity: 0;
-  }
-
+.lion-particle{
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ffd47a;
+  box-shadow:0 0 13px #ffb344;
+  opacity:0;
 }
 
+.lion-particle.p1{left:34%;top:32%}
+.lion-particle.p2{left:49%;top:24%}
+.lion-particle.p3{left:61%;top:41%}
+.lion-particle.p4{left:28%;top:57%}
+.lion-particle.p5{left:68%;top:61%}
 
-/* GOLDEN GLOW */
-
-@keyframes giftGlow {
-
-  0%,
-  25% {
-
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%) scale(0.2);
-  }
-
-  48% {
-
-    opacity: 1;
-
-    transform:
-      translate(-50%, -50%) scale(1);
-  }
-
-  75% {
-
-    opacity: 0.8;
-
-    transform:
-      translate(-50%, -50%) scale(1.25);
-  }
-
-  100% {
-
-    opacity: 0;
-
-    transform:
-      translate(-50%, -50%) scale(1.6);
-  }
-
+.gift-overlay.show .lion-particle{
+  animation:particle 2.1s ease 2.1s forwards;
 }
-  
-  </style>
+
+@keyframes lionMove{
+  0%{
+    left:-240px;
+    opacity:0;
+    transform:translateY(-50%) scale(.75);
+  }
+  18%{opacity:1}
+  47%{
+    left:50%;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  63%{
+    left:50%;
+    transform:translate(-50%,-50%) scale(1.13);
+  }
+  73%{
+    left:50%;
+    transform:translate(-50%,-50%) scale(1.05);
+  }
+  100%{
+    left:125%;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.8);
+  }
+}
+
+@keyframes lionLight{
+  0%,20%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.1);
+  }
+  48%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  70%{
+    opacity:.75;
+    transform:translate(-50%,-50%) scale(1.25);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.7);
+  }
+}
+
+@keyframes particle{
+  0%{
+    opacity:0;
+    transform:translate(0,0) scale(.2);
+  }
+  35%{opacity:1}
+  100%{
+    opacity:0;
+    transform:translate(30px,-80px) scale(1.8);
+  }
+}
+
+/* ---------------- UNIVERSE ---------------- */
+
+.universe-animation{
+  position:absolute;
+  inset:0;
+  display:none;
+}
+
+.gift-overlay.universe .universe-animation{
+  display:block;
+}
+
+.universe-ring{
+  position:absolute;
+  left:50%;
+  top:45%;
+  width:310px;
+  height:310px;
+  border-radius:50%;
+  border:8px solid rgba(147,98,255,.55);
+  box-shadow:
+    0 0 40px rgba(108,65,255,.8),
+    inset 0 0 40px rgba(67,211,255,.6);
+  transform:translate(-50%,-50%) scale(.1) rotate(0deg);
+  opacity:0;
+}
+
+.gift-overlay.show .universe-ring{
+  animation:universeRing 6.2s ease forwards;
+}
+
+.universe-core{
+  position:absolute;
+  left:50%;
+  top:45%;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,#fff 0%,#6edfff 22%,#7a47ff 55%,transparent 72%);
+  filter:blur(2px);
+  transform:translate(-50%,-50%) scale(.1);
+  opacity:0;
+}
+
+.gift-overlay.show .universe-core{
+  animation:universeCore 6.2s ease forwards;
+}
+
+@keyframes universeRing{
+  0%,10%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.1) rotate(0deg);
+  }
+  40%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1) rotate(170deg);
+  }
+  72%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.25) rotate(330deg);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(2.2) rotate(520deg);
+  }
+}
+
+@keyframes universeCore{
+  0%,20%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.1);
+  }
+  45%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.2);
+  }
+  72%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.6);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(4);
+  }
+}
+
+/* ---------------- SANTA ---------------- */
+
+.santa-animation{
+  position:absolute;
+  inset:0;
+  display:none;
+}
+
+.gift-overlay.santa .santa-animation{
+  display:block;
+}
+
+.santa-sleigh{
+  position:absolute;
+  left:-300px;
+  top:48%;
+  font-size:105px;
+  white-space:nowrap;
+  filter:
+    drop-shadow(0 10px 18px rgba(0,0,0,.6))
+    drop-shadow(0 0 20px rgba(101,180,255,.8));
+}
+
+.gift-overlay.show .santa-sleigh{
+  animation:santaMove 6.4s ease-in-out forwards;
+}
+
+.snow{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  background-image:
+    radial-gradient(circle,#fff 0 2px,transparent 3px),
+    radial-gradient(circle,#fff 0 1px,transparent 2px);
+  background-size:45px 45px,28px 28px;
+  background-position:0 0,14px 10px;
+}
+
+.gift-overlay.show .snow{
+  animation:snowShow 6.4s ease forwards;
+}
+
+@keyframes santaMove{
+  0%{
+    left:-310px;
+    top:62%;
+    opacity:0;
+    transform:rotate(-5deg) scale(.75);
+  }
+  18%{opacity:1}
+  48%{
+    left:18%;
+    top:41%;
+    transform:rotate(2deg) scale(1);
+  }
+  68%{
+    left:38%;
+    top:38%;
+    transform:rotate(-2deg) scale(1.1);
+  }
+  100%{
+    left:120%;
+    top:18%;
+    opacity:0;
+    transform:rotate(-8deg) scale(.75);
+  }
+}
+
+@keyframes snowShow{
+  0%,100%{opacity:0}
+  20%,75%{opacity:.85}
+}
+
+/* ---------------- ROSE ---------------- */
+
+.rose-animation{
+  position:absolute;
+  inset:0;
+  display:none;
+}
+
+.gift-overlay.rose .rose-animation{
+  display:block;
+}
+
+.rose-main{
+  position:absolute;
+  left:50%;
+  top:48%;
+  font-size:140px;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.2) rotate(-25deg);
+  filter:drop-shadow(0 0 30px rgba(255,53,101,.8));
+}
+
+.gift-overlay.show .rose-main{
+  animation:rosePop 3.7s ease forwards;
+}
+
+@keyframes rosePop{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.2) rotate(-25deg);
+  }
+  35%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.1) rotate(6deg);
+  }
+  70%{
+    opacity:1;
+    transform:translate(-50%,-55%) scale(1) rotate(0deg);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-90%) scale(.75);
+  }
+}
+
+/* =====================================================
+   CONTROL PANEL
+===================================================== */
+
+.panel{
+  width:640px;
+  background:#111216;
+  border:1px solid #292b31;
+  border-radius:14px;
+  padding:18px;
+}
+
+.panel h1{
+  font-size:21px;
+  margin-bottom:5px;
+}
+
+.subtitle{
+  color:#7e8189;
+  font-size:12px;
+  margin-bottom:18px;
+}
+
+.section{
+  background:#17181d;
+  border:1px solid #292b31;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:14px;
+}
+
+.section h2{
+  font-size:15px;
+  margin-bottom:12px;
+}
+
+input{
+  width:100%;
+  background:#0d0e12;
+  color:#fff;
+  border:1px solid #34363e;
+  border-radius:8px;
+  padding:10px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#816cff;
+}
+
+button{
+  border:none;
+  border-radius:8px;
+  padding:10px 13px;
+  color:#fff;
+  background:#292b32;
+  font-weight:bold;
+}
+
+button:hover{
+  background:#383b45;
+}
+
+.primary{
+  background:#705cff;
+}
+
+.primary:hover{
+  background:#816eff;
+}
+
+.danger{
+  background:#4b2026;
+  color:#ff7d8b;
+}
+
+.quick-add{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.avatar-preview{
+  width:78px;
+  height:78px;
+  border-radius:10px;
+  overflow:hidden;
+  flex-shrink:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#0d0e12;
+  border:1px dashed #444;
+  color:#666;
+  font-size:10px;
+}
+
+.avatar-preview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.quick-fields{
+  flex:1;
+}
+
+.quick-fields input{
+  margin-bottom:8px;
+}
+
+.hint{
+  color:#777;
+  font-size:11px;
+  margin-top:8px;
+}
+
+/* slots */
+
+.slots{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.slot-card{
+  background:#0e0f13;
+  border:1px solid #2b2d34;
+  border-radius:9px;
+  padding:10px;
+  min-height:88px;
+}
+
+.slot-card.active{
+  border-color:#806cff;
+  box-shadow:0 0 0 1px rgba(128,108,255,.25);
+}
+
+.slot-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:7px;
+}
+
+.slot-number{
+  color:#777;
+  font-size:11px;
+}
+
+.timer{
+  color:#78ffac;
+  font-size:12px;
+  font-family:monospace;
+}
+
+.slot-person{
+  font-size:13px;
+  margin-bottom:8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.slot-actions{
+  display:flex;
+  gap:6px;
+}
+
+.slot-actions button{
+  padding:6px 8px;
+  font-size:10px;
+  flex:1;
+}
+
+/* gifts */
+
+.selected-info{
+  padding:10px;
+  margin-bottom:10px;
+  background:#0e0f13;
+  border-radius:8px;
+  color:#aaa;
+  font-size:12px;
+}
+
+.gifts{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.gift{
+  background:#0e0f13;
+  border:1px solid #292b31;
+  border-radius:10px;
+  text-align:center;
+  padding:12px 5px;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.gift:hover{
+  border-color:#7765ff;
+  transform:translateY(-2px);
+}
+
+.gift-icon{
+  font-size:28px;
+  margin-bottom:5px;
+}
+
+.gift-name{
+  font-size:11px;
+}
+
+.gift-value{
+  margin-top:3px;
+  color:#888;
+  font-size:9px;
+}
+
+/* output-only */
+
+body.output-mode{
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:#000;
+}
+
+body.output-mode .app{
+  padding:0;
+  margin:0;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+body.output-mode .panel,
+body.output-mode .live-header{
+  display:none;
+}
+
+body.output-mode .live-side{
+  position:static;
+}
+
+body.output-mode .live{
+  height:100vh;
+  width:56.25vh;
+  max-width:100vw;
+  max-height:177.777vw;
+  border-radius:0;
+}
+
+/* mobile */
+
+@media(max-width:1100px){
+  .app{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .live-side{
+    position:relative;
+    top:0;
+  }
+
+  .panel{
+    width:min(640px,100%);
+  }
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- ================= LIVE OUTPUT ================= -->
+  <div class="live-side">
 
-  <div class="live-wrapper">
+    <div class="live-header">
+      <span>LIVE OUTPUT — 9:16</span>
 
-    <div class="live-title">
-      LIVE OUTPUT — 9:16
+      <button
+        class="open-output"
+        onclick="openOutputWindow()"
+      >
+        OPEN CLEAN OUTPUT
+      </button>
     </div>
 
     <div class="live" id="live">
 
       <div class="host">
+        <div
+          id="hostContent"
+          class="host-placeholder"
+        >
+          Add Host Image
+        </div>
+      </div>
 
-        <div class="host-label">
-          HOST
+      <div class="guest-backdrop"></div>
+
+      <div
+        class="guests"
+        id="liveGuests"
+      ></div>
+
+      <!-- GIFT OVERLAY -->
+
+      <div
+        class="gift-overlay"
+        id="giftOverlay"
+      >
+
+        <div class="gift-darken"></div>
+
+        <div class="lion-animation">
+          <div class="lion-light"></div>
+
+          <div class="lion-body">
+            <div class="lion-head">🦁</div>
+          </div>
+
+          <div class="lion-particle p1"></div>
+          <div class="lion-particle p2"></div>
+          <div class="lion-particle p3"></div>
+          <div class="lion-particle p4"></div>
+          <div class="lion-particle p5"></div>
         </div>
 
-        <div id="hostContent" class="host-placeholder">
-          Add your host image from the Control Panel
+        <div class="universe-animation">
+          <div class="universe-ring"></div>
+          <div class="universe-core"></div>
+        </div>
+
+        <div class="santa-animation">
+          <div class="snow"></div>
+          <div class="santa-sleigh">
+            🦌 🛷🎅
+          </div>
+        </div>
+
+        <div class="rose-animation">
+          <div class="rose-main">🌹</div>
         </div>
 
       </div>
 
-      <div class="guests" id="liveGuests"></div>
-      
-      <div class="gift-overlay" id="giftOverlay">
-  <div class="gift-glow"></div>
-  <div class="lion-gift"></div>
-</div>
-
     </div>
-
   </div>
 
-  <!-- ================= CONTROL PANEL ================= -->
+  <!-- CONTROL PANEL -->
 
   <div class="panel">
 
     <h1>Live Control Panel</h1>
 
     <div class="subtitle">
-      Host • 8 Guests • 120 sec auto-remove • Gift controls
+      Host • 8 Guests • Auto Remove 120 sec • Gift Queue
     </div>
 
     <!-- HOST -->
@@ -630,7 +959,7 @@
         type="file"
         id="hostImageInput"
         accept="image/*"
-      />
+      >
 
     </div>
 
@@ -655,13 +984,13 @@
             type="file"
             id="guestImageInput"
             accept="image/*"
-          />
+          >
 
           <input
             type="text"
             id="guestName"
             placeholder="Guest name..."
-          />
+          >
 
           <button
             class="primary"
@@ -675,13 +1004,13 @@
       </div>
 
       <div class="hint">
-        Guest automatically enters the first free slot.
-        Press ENTER after typing the name.
+        Ընտրիր նկարը → գրիր անունը → ENTER։
+        Guest-ը ավտոմատ կմտնի առաջին ազատ slot-ը։
       </div>
 
     </div>
 
-    <!-- ACTIVE GUESTS -->
+    <!-- GUESTS -->
 
     <div class="section">
 
@@ -698,7 +1027,7 @@
 
     <div class="section">
 
-      <h2>Gift Controls — next stage</h2>
+      <h2>Gift Controls</h2>
 
       <div
         class="selected-info"
@@ -709,672 +1038,879 @@
 
       <div class="gifts">
 
-        <div class="gift">
+        <div
+          class="gift"
+          onclick="sendGift('rose')"
+        >
           <div class="gift-icon">🌹</div>
           <div class="gift-name">Rose</div>
+          <div class="gift-value">1,000</div>
         </div>
 
-        <div class="gift" onclick="sendLionGift()">
-  <div class="gift-icon">🦁</div>
-  <div class="gift-name">Lion<br>35,000</div>
-</div>
+        <div
+          class="gift"
+          onclick="sendGift('lion')"
+        >
+          <div class="gift-icon">🦁</div>
+          <div class="gift-name">Lion</div>
+          <div class="gift-value">35,000</div>
+        </div>
 
-        <div class="gift">
+        <div
+          class="gift"
+          onclick="sendGift('universe')"
+        >
           <div class="gift-icon">🌌</div>
           <div class="gift-name">Universe</div>
+          <div class="gift-value">44,999</div>
         </div>
 
-        <div class="gift">
+        <div
+          class="gift"
+          onclick="sendGift('santa')"
+        >
           <div class="gift-icon">🎅</div>
           <div class="gift-name">Santa</div>
+          <div class="gift-value">25,000</div>
         </div>
 
       </div>
 
       <div class="hint">
-        Gift animations and scores will be connected in the next stage.
+        Ամեն սեղմումը առանձին gift event է։
+        Եթե արագ մի քանի անգամ սեղմես՝ հերթով կաշխատեն։
       </div>
 
     </div>
 
   </div>
-
 </div>
-
 
 <script>
 
-  const MAX_GUESTS = 8;
-  const GUEST_TIME = 120;
-
-  let guests = Array(MAX_GUESTS).fill(null);
-
-  let selectedGuest = null;
-
-  let pendingGuestImage = null;
-
-
-  /* =========================
-     HOST IMAGE
-  ========================== */
-
-  const hostInput =
-    document.getElementById("hostImageInput");
-
-  const hostContent =
-    document.getElementById("hostContent");
-
-
-  hostInput.addEventListener(
-    "change",
-    function(event) {
-
-      const file = event.target.files[0];
-
-      if (!file) return;
-
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-
-        hostContent.innerHTML =
-          `<img src="${e.target.result}">`;
-
-      };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-
-  /* =========================
-     GUEST IMAGE
-  ========================== */
-
-  const guestImageInput =
-    document.getElementById("guestImageInput");
-
-  const guestPreview =
-    document.getElementById("guestPreview");
-
-  const guestName =
-    document.getElementById("guestName");
-
-
-  guestImageInput.addEventListener(
-    "change",
-    function(event) {
-
-      const file = event.target.files[0];
-
-      if (!file) return;
-
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-
-        pendingGuestImage =
-          e.target.result;
-
-        guestPreview.innerHTML =
-          `<img src="${pendingGuestImage}">`;
-
-      };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-
-  /* =========================
-     ADD GUEST
-  ========================== */
-
-  function addGuest() {
-
-    const name =
-      guestName.value.trim();
-
-    if (!name) {
-
-      alert("Enter guest name");
-
-      return;
-
-    }
-
-    if (!pendingGuestImage) {
-
-      alert("Choose guest image");
-
-      return;
-
-    }
-
-    const freeSlot =
-      guests.findIndex(
-        guest => guest === null
-      );
-
-    if (freeSlot === -1) {
-
-      alert(
-        "All 8 guest slots are occupied."
-      );
-
-      return;
-
-    }
-
-    guests[freeSlot] = {
-
-      name: name,
-
-      image: pendingGuestImage,
-
-      score: 0,
-
-      timeLeft: GUEST_TIME
-
-    };
-
-
-    selectedGuest = freeSlot;
-
-
-    guestName.value = "";
-
-    guestImageInput.value = "";
-
-    pendingGuestImage = null;
-
-    guestPreview.innerHTML =
-      "AVATAR";
-
-
-    renderEverything();
-
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const MAX_GUESTS = 8;
+const GUEST_DURATION = 120;
+
+const GIFTS = {
+  rose:{
+    value:1000,
+    duration:3700
+  },
+
+  lion:{
+    value:35000,
+    duration:5800
+  },
+
+  universe:{
+    value:44999,
+    duration:6200
+  },
+
+  santa:{
+    value:25000,
+    duration:6400
   }
+};
 
+/* =====================================================
+   STATE
+===================================================== */
 
-  document
-    .getElementById("addGuestButton")
-    .addEventListener(
-      "click",
-      addGuest
-    );
+let guests = Array(MAX_GUESTS).fill(null);
 
+let selectedGuest = null;
 
-  guestName.addEventListener(
-    "keydown",
-    function(event) {
+let pendingGuestImage = null;
 
-      if (event.key === "Enter") {
-
-        addGuest();
-
-      }
-
-    }
-  );
-
-
-  /* =========================
-     REMOVE
-  ========================== */
-
-  function removeGuest(index) {
-
-    guests[index] = null;
-
-    if (selectedGuest === index) {
-
-      selectedGuest = null;
-
-    }
-
-    renderEverything();
-
-  }
-
-
-  /* =========================
-     SELECT
-  ========================== */
-
-  function selectGuest(index) {
-
-    if (!guests[index]) return;
-
-    selectedGuest = index;
-
-    renderEverything();
-
-  }
-
-
-  /* =========================
-     LIVE OUTPUT
-  ========================== */
-
-  function renderLiveGuests() {
-
-    const container =
-      document.getElementById(
-        "liveGuests"
-      );
-
-    container.innerHTML = "";
-
-
-    guests.forEach(
-      (guest, index) => {
-
-        const box =
-          document.createElement("div");
-
-        box.className =
-          "guest";
-
-
-        if (!guest) {
-
-          box.innerHTML = `
-
-            <div class="guest-empty">
-
-              <div class="plus">
-                +
-              </div>
-
-              SLOT ${index + 1}
-
-            </div>
-
-          `;
-
-        }
-
-        else {
-
-          box.innerHTML = `
-
-            <img
-              src="${guest.image}"
-            >
-
-            <div class="score">
-
-              💎 ${guest.score.toLocaleString()}
-
-            </div>
-
-            <div class="guest-name">
-
-              ${escapeHTML(guest.name)}
-
-            </div>
-
-          `;
-
-        }
-
-
-        container.appendChild(box);
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     CONTROL SLOTS
-  ========================== */
-
-  function renderControlSlots() {
-
-    const container =
-      document.getElementById(
-        "controlSlots"
-      );
-
-    container.innerHTML = "";
-
-
-    guests.forEach(
-      (guest, index) => {
-
-        const card =
-          document.createElement("div");
-
-        card.className =
-          "slot-card";
-
-        if (selectedGuest === index) {
-
-          card.classList.add(
-            "active"
-          );
-
-        }
-
-
-        if (!guest) {
-
-          card.innerHTML = `
-
-            <div class="slot-top">
-
-              <span class="slot-number">
-
-                SLOT ${index + 1}
-
-              </span>
-
-            </div>
-
-            <div
-              class="slot-person"
-              style="color:#555"
-            >
-
-              EMPTY
-
-            </div>
-
-          `;
-
-        }
-
-        else {
-
-          card.innerHTML = `
-
-            <div class="slot-top">
-
-              <span class="slot-number">
-
-                SLOT ${index + 1}
-
-              </span>
-
-              <span class="timer">
-
-                ${formatTime(
-                  guest.timeLeft
-                )}
-
-              </span>
-
-            </div>
-
-
-            <div class="slot-person">
-
-              ${escapeHTML(
-                guest.name
-              )}
-
-            </div>
-
-
-            <div class="slot-actions">
-
-              <button
-                onclick="selectGuest(${index})"
-              >
-
-                SELECT
-
-              </button>
-
-              <button
-                class="danger"
-                onclick="removeGuest(${index})"
-              >
-
-                REMOVE
-
-              </button>
-
-            </div>
-
-          `;
-
-        }
-
-
-        container.appendChild(card);
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     SELECTED INFO
-  ========================== */
-
-  function renderSelectedInfo() {
-
-    const info =
-      document.getElementById(
-        "selectedInfo"
-      );
-
-
-    if (
-      selectedGuest === null ||
-      !guests[selectedGuest]
-    ) {
-
-      info.textContent =
-        "Selected guest: none";
-
-      return;
-
-    }
-
-
-    const guest =
-      guests[selectedGuest];
-
-
-    info.textContent =
-      `Selected: ${guest.name} — Slot ${selectedGuest + 1}`;
-
-  }
-
-
-  /* =========================
-     TIMER
-  ========================== */
-
-  setInterval(
-    function() {
-
-      let changed = false;
-
-
-      guests.forEach(
-        (guest, index) => {
-
-          if (!guest) return;
-
-
-          guest.timeLeft--;
-
-
-          if (
-            guest.timeLeft <= 0
-          ) {
-
-            guests[index] = null;
-
-            if (
-              selectedGuest === index
-            ) {
-
-              selectedGuest = null;
-
-            }
-
-          }
-
-
-          changed = true;
-
-        }
-      );
-
-
-      if (changed) {
-
-        renderEverything();
-
-      }
-
-    },
-    1000
-  );
-
-
-  /* =========================
-     HELPERS
-  ========================== */
-
-  function formatTime(seconds) {
-
-    const minutes =
-      Math.floor(
-        seconds / 60
-      );
-
-    const secs =
-      seconds % 60;
-
-
-    return (
-      String(minutes)
-        .padStart(2, "0")
-      +
-      ":"
-      +
-      String(secs)
-        .padStart(2, "0")
-    );
-
-  }
-
-
-  function escapeHTML(text) {
-
-    const div =
-      document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-
-  }
-
-
-  function renderEverything() {
-
-    renderLiveGuests();
-
-    renderControlSlots();
-
-    renderSelectedInfo();
-
-  }
-
-/* =========================
-   GIFT ENGINE
-========================= */
+let hostImage = null;
 
 const giftQueue = [];
 
 let giftPlaying = false;
 
+/* =====================================================
+   OUTPUT WINDOW COMMUNICATION
+===================================================== */
 
-function sendLionGift() {
+const channel =
+  new BroadcastChannel("live_guest_studio");
 
-  if (
-    selectedGuest === null ||
-    !guests[selectedGuest]
-  ) {
-    alert("First select a guest");
+const params =
+  new URLSearchParams(location.search);
+
+const outputMode =
+  params.get("mode") === "output";
+
+if(outputMode){
+  document.body.classList.add("output-mode");
+}
+
+function openOutputWindow(){
+
+  window.open(
+    location.pathname + "?mode=output",
+    "liveOutput",
+    "width=520,height=920"
+  );
+
+  setTimeout(()=>{
+    broadcastState();
+  },800);
+}
+
+channel.onmessage = function(event){
+
+  const message = event.data;
+
+  if(
+    outputMode &&
+    message.type === "state"
+  ){
+    applyRemoteState(message.state);
+  }
+
+  if(
+    outputMode &&
+    message.type === "gift"
+  ){
+    playGiftAnimation(
+      message.giftType,
+      false
+    );
+  }
+
+  if(
+    !outputMode &&
+    message.type === "requestState"
+  ){
+    broadcastState();
+  }
+};
+
+if(outputMode){
+
+  channel.postMessage({
+    type:"requestState"
+  });
+}
+
+function broadcastState(){
+
+  if(outputMode) return;
+
+  channel.postMessage({
+    type:"state",
+    state:{
+      guests,
+      selectedGuest,
+      hostImage
+    }
+  });
+}
+
+function applyRemoteState(state){
+
+  guests = state.guests || Array(MAX_GUESTS).fill(null);
+
+  selectedGuest = state.selectedGuest;
+
+  hostImage = state.hostImage;
+
+  renderHost();
+  renderLiveGuests();
+}
+
+/* =====================================================
+   HOST
+===================================================== */
+
+const hostInput =
+  document.getElementById("hostImageInput");
+
+if(hostInput){
+
+  hostInput.addEventListener(
+    "change",
+    function(event){
+
+      const file =
+        event.target.files[0];
+
+      if(!file) return;
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(e){
+
+          hostImage =
+            e.target.result;
+
+          renderHost();
+
+          broadcastState();
+        };
+
+      reader.readAsDataURL(file);
+    }
+  );
+}
+
+function renderHost(){
+
+  const hostContent =
+    document.getElementById("hostContent");
+
+  if(!hostContent) return;
+
+  if(!hostImage){
+
+    hostContent.className =
+      "host-placeholder";
+
+    hostContent.innerHTML =
+      "Add Host Image";
+
     return;
   }
 
-  const targetSlot = selectedGuest;
+  hostContent.className = "";
 
-  // Add 35,000 to selected guest
-  guests[targetSlot].score += 35000;
+  hostContent.innerHTML =
+    `<img src="${hostImage}">`;
+}
+
+/* =====================================================
+   GUEST IMAGE
+===================================================== */
+
+const guestImageInput =
+  document.getElementById("guestImageInput");
+
+const guestPreview =
+  document.getElementById("guestPreview");
+
+const guestName =
+  document.getElementById("guestName");
+
+if(guestImageInput){
+
+  guestImageInput.addEventListener(
+    "change",
+    function(event){
+
+      const file =
+        event.target.files[0];
+
+      if(!file) return;
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(e){
+
+          pendingGuestImage =
+            e.target.result;
+
+          guestPreview.innerHTML =
+            `<img src="${pendingGuestImage}">`;
+        };
+
+      reader.readAsDataURL(file);
+    }
+  );
+}
+
+/* Paste screenshot directly */
+
+document.addEventListener(
+  "paste",
+  function(event){
+
+    if(outputMode) return;
+
+    const items =
+      event.clipboardData?.items;
+
+    if(!items) return;
+
+    for(const item of items){
+
+      if(
+        item.type &&
+        item.type.startsWith("image/")
+      ){
+
+        const file =
+          item.getAsFile();
+
+        const reader =
+          new FileReader();
+
+        reader.onload =
+          function(e){
+
+            pendingGuestImage =
+              e.target.result;
+
+            guestPreview.innerHTML =
+              `<img src="${pendingGuestImage}">`;
+          };
+
+        reader.readAsDataURL(file);
+
+        break;
+      }
+    }
+  }
+);
+
+/* =====================================================
+   ADD GUEST
+===================================================== */
+
+function addGuest(){
+
+  if(outputMode) return;
+
+  const name =
+    guestName.value.trim();
+
+  if(!name){
+
+    alert("Enter guest name");
+
+    return;
+  }
+
+  if(!pendingGuestImage){
+
+    alert("Choose or paste guest image");
+
+    return;
+  }
+
+  const freeSlot =
+    guests.findIndex(
+      guest => guest === null
+    );
+
+  if(freeSlot === -1){
+
+    alert("All 8 guest slots are occupied");
+
+    return;
+  }
+
+  guests[freeSlot] = {
+
+    name,
+
+    image:pendingGuestImage,
+
+    score:0,
+
+    expiresAt:
+      Date.now() +
+      GUEST_DURATION * 1000
+  };
+
+  selectedGuest =
+    freeSlot;
+
+  guestName.value = "";
+
+  guestImageInput.value = "";
+
+  pendingGuestImage = null;
+
+  guestPreview.innerHTML =
+    "AVATAR";
 
   renderEverything();
 
-  // Every click becomes a separate gift event
-  giftQueue.push({
-    type: "lion",
-    slot: targetSlot
-  });
+  broadcastState();
+}
+
+const addGuestButton =
+  document.getElementById("addGuestButton");
+
+if(addGuestButton){
+
+  addGuestButton.addEventListener(
+    "click",
+    addGuest
+  );
+}
+
+if(guestName){
+
+  guestName.addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+        addGuest();
+      }
+    }
+  );
+}
+
+/* =====================================================
+   SELECT / REMOVE
+===================================================== */
+
+function selectGuest(index){
+
+  if(!guests[index]) return;
+
+  selectedGuest =
+    index;
+
+  renderEverything();
+
+  broadcastState();
+}
+
+function removeGuest(index){
+
+  guests[index] = null;
+
+  if(selectedGuest === index){
+    selectedGuest = null;
+  }
+
+  renderEverything();
+
+  broadcastState();
+}
+
+/* =====================================================
+   LIVE GUESTS
+===================================================== */
+
+function renderLiveGuests(){
+
+  const container =
+    document.getElementById("liveGuests");
+
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  guests.forEach(
+    (guest,index)=>{
+
+      const box =
+        document.createElement("div");
+
+      box.className =
+        "guest";
+
+      if(
+        guest &&
+        selectedGuest === index
+      ){
+        box.classList.add("selected");
+      }
+
+      if(!guest){
+
+        box.innerHTML = `
+          <div class="guest-empty">
+            <div class="plus">+</div>
+            SLOT ${index + 1}
+          </div>
+        `;
+      }
+
+      else{
+
+        box.innerHTML = `
+          <img src="${guest.image}">
+
+          <div class="score">
+            💎 ${Number(guest.score).toLocaleString()}
+          </div>
+
+          <div class="guest-name">
+            ${escapeHTML(guest.name)}
+          </div>
+        `;
+      }
+
+      container.appendChild(box);
+    }
+  );
+}
+
+/* =====================================================
+   CONTROL SLOTS
+===================================================== */
+
+function renderControlSlots(){
+
+  const container =
+    document.getElementById("controlSlots");
+
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  guests.forEach(
+    (guest,index)=>{
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "slot-card";
+
+      if(
+        selectedGuest === index
+      ){
+        card.classList.add("active");
+      }
+
+      if(!guest){
+
+        card.innerHTML = `
+          <div class="slot-top">
+            <span class="slot-number">
+              SLOT ${index + 1}
+            </span>
+          </div>
+
+          <div
+            class="slot-person"
+            style="color:#555"
+          >
+            EMPTY
+          </div>
+        `;
+      }
+
+      else{
+
+        const timeLeft =
+          Math.max(
+            0,
+            Math.ceil(
+              (
+                guest.expiresAt -
+                Date.now()
+              ) / 1000
+            )
+          );
+
+        card.innerHTML = `
+          <div class="slot-top">
+
+            <span class="slot-number">
+              SLOT ${index + 1}
+            </span>
+
+            <span class="timer">
+              ${formatTime(timeLeft)}
+            </span>
+
+          </div>
+
+          <div class="slot-person">
+            ${escapeHTML(guest.name)}
+          </div>
+
+          <div class="slot-actions">
+
+            <button
+              onclick="selectGuest(${index})"
+            >
+              SELECT
+            </button>
+
+            <button
+              class="danger"
+              onclick="removeGuest(${index})"
+            >
+              REMOVE
+            </button>
+
+          </div>
+        `;
+      }
+
+      container.appendChild(card);
+    }
+  );
+}
+
+/* =====================================================
+   SELECTED INFO
+===================================================== */
+
+function renderSelectedInfo(){
+
+  const info =
+    document.getElementById("selectedInfo");
+
+  if(!info) return;
+
+  if(
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ){
+
+    info.textContent =
+      "Selected guest: none";
+
+    return;
+  }
+
+  info.textContent =
+    `Selected: ${guests[selectedGuest].name} — Slot ${selectedGuest + 1}`;
+}
+
+/* =====================================================
+   GIFT ENGINE
+===================================================== */
+
+function sendGift(type){
+
+  if(outputMode) return;
+
+  if(
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ){
+
+    alert("First select a guest");
+
+    return;
+  }
+
+  const gift =
+    GIFTS[type];
+
+  if(!gift) return;
+
+  const target =
+    selectedGuest;
+
+  guests[target].score +=
+    gift.value;
+
+  renderEverything();
+
+  broadcastState();
+
+  giftQueue.push(type);
 
   processGiftQueue();
 }
 
+function processGiftQueue(){
 
-function processGiftQueue() {
+  if(giftPlaying) return;
 
-  // If animation is already playing,
-  // wait until it finishes.
-  if (giftPlaying) return;
-
-  // Nothing left in queue
-  if (giftQueue.length === 0) return;
+  if(
+    giftQueue.length === 0
+  ){
+    return;
+  }
 
   giftPlaying = true;
 
-  const gift = giftQueue.shift();
+  const type =
+    giftQueue.shift();
 
-  if (gift.type === "lion") {
-    playLionAnimation();
-  }
+  playGiftAnimation(
+    type,
+    true
+  );
 }
 
-
-function playLionAnimation() {
+function playGiftAnimation(
+  type,
+  notifyOutput
+){
 
   const overlay =
     document.getElementById("giftOverlay");
 
-  // Restart animation
-  overlay.classList.remove("show");
+  if(!overlay) return;
+
+  const gift =
+    GIFTS[type];
+
+  if(!gift) return;
+
+  overlay.className =
+    "gift-overlay";
 
   void overlay.offsetWidth;
 
-  overlay.classList.add("show");
+  overlay.classList.add(
+    type,
+    "show"
+  );
 
-  // Animation duration = 6 seconds
-  setTimeout(function() {
+  if(notifyOutput){
 
-    overlay.classList.remove("show");
+    channel.postMessage({
+      type:"gift",
+      giftType:type
+    });
+  }
 
-    giftPlaying = false;
+  setTimeout(
+    function(){
 
-    // Start next gift in queue
-    processGiftQueue();
+      overlay.className =
+        "gift-overlay";
 
-  }, 6000);
+      if(notifyOutput){
+
+        giftPlaying = false;
+
+        processGiftQueue();
+      }
+
+    },
+    gift.duration
+  );
 }
-  renderEverything();
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+setInterval(
+  function(){
+
+    if(outputMode) return;
+
+    let changed = false;
+
+    guests.forEach(
+      (guest,index)=>{
+
+        if(!guest) return;
+
+        if(
+          Date.now() >=
+          guest.expiresAt
+        ){
+
+          guests[index] = null;
+
+          if(
+            selectedGuest === index
+          ){
+            selectedGuest = null;
+          }
+
+          changed = true;
+        }
+      }
+    );
+
+    renderControlSlots();
+
+    if(changed){
+
+      renderEverything();
+
+      broadcastState();
+    }
+
+  },
+  500
+);
+
+/* =====================================================
+   HOTKEYS
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(outputMode) return;
+
+    if(
+      document.activeElement &&
+      document.activeElement.tagName === "INPUT"
+    ){
+      return;
+    }
+
+    const number =
+      Number(event.key);
+
+    if(
+      number >= 1 &&
+      number <= 8
+    ){
+
+      selectGuest(
+        number - 1
+      );
+    }
+  }
+);
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function formatTime(seconds){
+
+  const min =
+    Math.floor(seconds / 60);
+
+  const sec =
+    seconds % 60;
+
+  return (
+    String(min).padStart(2,"0")
+    +
+    ":"
+    +
+    String(sec).padStart(2,"0")
+  );
+}
+
+function escapeHTML(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text;
+
+  return div.innerHTML;
+}
+
+function renderEverything(){
+
+  renderHost();
+
+  renderLiveGuests();
+
+  renderControlSlots();
+
+  renderSelectedInfo();
+}
+
+renderEverything();
 
 </script>
-
 </body>
 </html>
