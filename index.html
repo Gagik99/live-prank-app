@@ -15,7 +15,7 @@
 html,body{
   min-height:100%;
   background:#08090d;
-  color:white;
+  color:#fff;
   font-family:Arial,Helvetica,sans-serif;
 }
 
@@ -72,8 +72,8 @@ button{
   position:relative;
   width:405px;
   height:720px;
-  background:#08090c;
   overflow:hidden;
+  background:#050608;
   border-radius:12px;
   box-shadow:0 20px 60px rgba(0,0,0,.45);
 }
@@ -86,50 +86,96 @@ button{
   position:absolute;
   left:0;
   top:0;
+
   width:58%;
   height:72%;
-  background:#111319;
+
   overflow:hidden;
+  background:#101217;
+
   z-index:2;
 
-  /* blue speaking glow */
-  border:2px solid rgba(71,191,255,.95);
-  animation:hostSpeakingGlow .52s ease-in-out infinite alternate;
+  border:2px solid transparent;
+
+  animation:
+    hostTalkingGlow 5.2s linear infinite;
 }
 
-@keyframes hostSpeakingGlow{
-  0%{
-    border-color:rgba(55,164,255,.55);
+/*
+  Խոսելու նման ոչ հավասար ռիթմ
+*/
+
+@keyframes hostTalkingGlow{
+
+  0%,
+  12%{
+    border-color:transparent;
+    box-shadow:none;
+  }
+
+  16%{
+    border-color:rgba(72,190,255,.9);
     box-shadow:
-      inset 0 0 8px rgba(48,169,255,.35),
-      0 0 5px rgba(48,169,255,.35);
+      inset 0 0 8px rgba(60,185,255,.55),
+      0 0 7px rgba(60,185,255,.50);
+  }
+
+  22%,
+  42%{
+    border-color:#67d5ff;
+    box-shadow:
+      inset 0 0 17px rgba(66,195,255,.90),
+      0 0 14px rgba(50,177,255,.90),
+      0 0 24px rgba(45,135,255,.55);
+  }
+
+  48%,
+  67%{
+    border-color:transparent;
+    box-shadow:none;
+  }
+
+  72%{
+    border-color:rgba(77,194,255,.75);
+    box-shadow:
+      inset 0 0 7px rgba(77,194,255,.45),
+      0 0 6px rgba(77,194,255,.45);
+  }
+
+  77%,
+  92%{
+    border-color:#71dcff;
+    box-shadow:
+      inset 0 0 18px rgba(65,200,255,.95),
+      0 0 16px rgba(65,190,255,.90),
+      0 0 27px rgba(35,125,255,.58);
   }
 
   100%{
-    border-color:rgba(111,220,255,1);
-    box-shadow:
-      inset 0 0 18px rgba(71,194,255,.95),
-      0 0 18px rgba(55,182,255,.95),
-      0 0 28px rgba(40,130,255,.55);
+    border-color:transparent;
+    box-shadow:none;
   }
 }
 
 .host img{
   width:100%;
   height:100%;
+  display:block;
   object-fit:cover;
   object-position:center;
-  display:block;
 }
 
 .host-placeholder{
   width:100%;
   height:100%;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  text-align:center;
+
   color:#656872;
+  text-align:center;
+
   background:
     radial-gradient(circle at 40% 30%,#1d2742,transparent 35%),
     radial-gradient(circle at 60% 75%,#2b172e,transparent 40%),
@@ -138,90 +184,126 @@ button{
 
 .host-label{
   position:absolute;
-  left:8px;
-  top:8px;
-  z-index:4;
-  background:rgba(0,0,0,.60);
+  left:7px;
+  top:7px;
+
+  z-index:5;
+
   padding:4px 7px;
+
   border-radius:5px;
+
+  background:rgba(0,0,0,.60);
+
   font-size:10px;
-  backdrop-filter:blur(5px);
 }
 
 /* =========================
-   GUESTS
+   GUEST AREA
 ========================= */
 
 .guests{
   position:absolute;
+
   right:0;
   top:0;
+
   width:42%;
-  height:72%;
+
   display:grid;
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:repeat(4,1fr);
+  grid-template-columns:repeat(2,1fr);
+
   gap:2px;
-  background:#050608;
+
   z-index:3;
+
+  background:#050608;
 }
+
+/* =========================
+   SQUARE GUEST
+========================= */
 
 .guest{
   position:relative;
+
+  width:100%;
+  aspect-ratio:1 / 1;
+
   overflow:hidden;
+
   background:#17191f;
-  border:1px solid rgba(255,255,255,.08);
+
+  border:1px solid rgba(255,255,255,.09);
 }
+
+/* selected guest */
 
 .guest.selected{
-  border:2px solid #53c9ff;
-  animation:selectedGuestGlow .65s ease-in-out infinite alternate;
-}
+  border:2px solid rgba(91,204,255,.95);
 
-@keyframes selectedGuestGlow{
-  from{
-    box-shadow:
-      inset 0 0 5px rgba(60,190,255,.4),
-      0 0 3px rgba(60,190,255,.25);
-  }
-
-  to{
-    box-shadow:
-      inset 0 0 12px rgba(71,202,255,.9),
-      0 0 12px rgba(71,202,255,.8);
-  }
+  box-shadow:
+    inset 0 0 8px rgba(73,197,255,.6),
+    0 0 7px rgba(73,197,255,.45);
 }
 
 .guest img{
+  position:absolute;
+  inset:0;
+
   width:100%;
   height:100%;
-  object-fit:cover;
+
   display:block;
+
+  object-fit:cover;
+  object-position:center;
 }
+
+/* bottom shadow */
 
 .guest::after{
   content:"";
+
   position:absolute;
+
   left:0;
   right:0;
   bottom:0;
+
   height:45%;
-  background:linear-gradient(transparent,rgba(0,0,0,.72));
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.75)
+    );
+
   pointer-events:none;
+
+  z-index:2;
 }
+
+/* SCORE */
 
 .guest-score{
   position:absolute;
+
   left:4px;
   top:4px;
+
   z-index:5;
+
   display:flex;
   align-items:center;
   gap:3px;
+
   padding:3px 5px;
+
   border-radius:5px;
+
   background:rgba(0,0,0,.68);
-  backdrop-filter:blur(4px);
+
   font-size:8px;
   font-weight:bold;
 }
@@ -229,128 +311,160 @@ button{
 .score-icon{
   width:10px;
   height:10px;
+
   display:inline-flex;
+
   align-items:center;
   justify-content:center;
+
   border-radius:50%;
-  background:#65e6ff;
-  color:white;
+
+  background:#5ee7ff;
+
+  color:#fff;
+
   font-size:6px;
 }
 
+/* NAME */
+
 .guest-name{
   position:absolute;
+
   left:5px;
-  right:23px;
+  right:24px;
   bottom:5px;
+
   z-index:5;
+
   font-size:8px;
+
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+
   text-shadow:0 1px 3px #000;
 }
 
 .guest-plus{
   display:inline-flex;
+
   align-items:center;
   justify-content:center;
+
   width:12px;
   height:12px;
+
   margin-left:3px;
+
   border-radius:50%;
-  background:#767981;
-  color:white;
+
+  background:#737780;
+
   font-size:9px;
 }
 
+/* =========================
+   MUTED MIC
+========================= */
+
 .guest-muted{
   position:absolute;
+
   right:5px;
   bottom:5px;
-  z-index:6;
-  color:white;
-  font-size:13px;
-  text-shadow:0 1px 4px #000;
+
+  z-index:7;
+
+  width:14px;
+  height:17px;
 }
 
+/* mic body */
+
+.guest-muted::before{
+  content:"";
+
+  position:absolute;
+
+  left:4px;
+  top:1px;
+
+  width:6px;
+  height:9px;
+
+  border:1.5px solid white;
+
+  border-radius:5px;
+}
+
+/* slash */
+
+.guest-muted::after{
+  content:"";
+
+  position:absolute;
+
+  left:6px;
+  top:-1px;
+
+  width:2px;
+  height:19px;
+
+  background:white;
+
+  transform:rotate(-42deg);
+
+  border-radius:2px;
+
+  box-shadow:0 1px 2px #000;
+}
+
+/* EMPTY */
+
 .guest-empty{
-  width:100%;
-  height:100%;
+  position:absolute;
+  inset:0;
+
   display:flex;
   flex-direction:column;
+
   align-items:center;
   justify-content:center;
-  gap:5px;
-  color:#666;
+
+  gap:4px;
+
+  color:#6a6d74;
+
   font-size:8px;
 }
 
 .empty-plus{
-  font-size:27px;
-  color:#999;
+  color:#aaa;
+  font-size:26px;
 }
 
 /* =========================
-   BOTTOM ZONE
+   BOTTOM VIDEO AREA
 ========================= */
 
 .bottom-zone{
   position:absolute;
+
   left:0;
   bottom:0;
+
   width:100%;
   height:28%;
+
   overflow:hidden;
-  background:linear-gradient(180deg,rgba(7,8,11,.90),#050608);
+
+  background:#000;
+
+  z-index:4;
 }
 
-/* =========================
-   COMMENTS
-========================= */
-
-.comments{
-  position:absolute;
-  inset:0;
-  padding:12px;
-  z-index:5;
-  transition:opacity .2s ease,transform .2s ease;
-}
-
-.comments.hidden{
-  opacity:0;
-  transform:translateY(10px);
-  pointer-events:none;
-}
-
-.comment{
-  display:flex;
-  align-items:flex-start;
-  gap:6px;
-  margin-bottom:7px;
-  font-size:10px;
-}
-
-.comment-avatar{
-  width:21px;
-  height:21px;
-  flex-shrink:0;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#30333d;
-  font-size:8px;
-}
-
-.comment-user{
-  color:#a9abb3;
-  font-weight:bold;
-}
-
-.comment-text{
-  line-height:1.3;
-}
+/* NO COMMENTS ANYMORE */
 
 /* =========================
    GIFT VIDEO
@@ -358,12 +472,17 @@ button{
 
 .gift-stage{
   position:absolute;
+
   inset:0;
-  z-index:10;
+
+  overflow:hidden;
+
   opacity:0;
   visibility:hidden;
-  pointer-events:none;
+
   background:#000;
+
+  z-index:10;
 }
 
 .gift-stage.active{
@@ -371,11 +490,29 @@ button{
   visibility:visible;
 }
 
+/*
+  Persistent video:
+  ոչ մի click նոր video չի ստեղծում
+*/
+
 #lionVideo{
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
   width:100%;
   height:100%;
+
   display:block;
+
   object-fit:cover;
+  object-position:center;
+
+  transform:
+    translate(-50%,-50%)
+    scale(1.08);
+
   background:#000;
 }
 
@@ -385,9 +522,13 @@ button{
 
 .panel{
   width:650px;
+
   padding:18px;
+
   border-radius:14px;
+
   border:1px solid #292c34;
+
   background:#111217;
 }
 
@@ -397,31 +538,44 @@ button{
 }
 
 .subtitle{
-  color:#81848d;
-  font-size:12px;
   margin-bottom:18px;
+
+  color:#81848d;
+
+  font-size:12px;
 }
 
 .section{
   padding:15px;
+
   margin-bottom:14px;
+
   border-radius:11px;
+
   border:1px solid #292c34;
+
   background:#17181e;
 }
 
 .section h2{
-  font-size:15px;
   margin-bottom:12px;
+
+  font-size:15px;
 }
 
 input{
   width:100%;
+
   padding:10px;
+
   border-radius:8px;
+
   border:1px solid #363943;
+
   background:#0d0e12;
+
   color:#fff;
+
   outline:none;
 }
 
@@ -431,10 +585,15 @@ input:focus{
 
 button{
   padding:9px 12px;
-  border:none;
+
+  border:0;
+
   border-radius:8px;
-  color:white;
+
+  color:#fff;
+
   background:#2b2e36;
+
   font-weight:bold;
 }
 
@@ -455,7 +614,9 @@ button:hover{
   color:#ff8491;
 }
 
-/* QUICK ADD */
+/* =========================
+   QUICK ADD
+========================= */
 
 .quick-add{
   display:flex;
@@ -466,21 +627,31 @@ button:hover{
 .avatar-preview{
   width:78px;
   height:78px;
+
   flex-shrink:0;
+
   overflow:hidden;
+
   border-radius:9px;
+
   border:1px dashed #484b55;
+
   background:#0d0e12;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
+
   color:#676a72;
+
   font-size:10px;
 }
 
 .avatar-preview img{
   width:100%;
   height:100%;
+
   object-fit:cover;
 }
 
@@ -494,53 +665,72 @@ button:hover{
 
 .hint{
   margin-top:8px;
+
   color:#777b84;
+
   font-size:11px;
   line-height:1.4;
 }
 
-/* SLOTS */
+/* =========================
+   CONTROL SLOTS
+========================= */
 
 .slots{
   display:grid;
+
   grid-template-columns:1fr 1fr;
+
   gap:8px;
 }
 
 .slot-card{
   min-height:92px;
+
   padding:10px;
+
   border-radius:9px;
+
   border:1px solid #2d3038;
+
   background:#0e0f13;
 }
 
 .slot-card.active{
   border-color:#826eff;
-  box-shadow:0 0 0 1px rgba(130,110,255,.25);
+
+  box-shadow:
+    0 0 0 1px rgba(130,110,255,.25);
 }
 
 .slot-top{
   display:flex;
+
   justify-content:space-between;
   align-items:center;
+
   margin-bottom:7px;
 }
 
 .slot-number{
   color:#777b84;
+
   font-size:10px;
 }
 
 .timer{
   color:#70f5a2;
-  font-family:monospace;
+
   font-size:12px;
+
+  font-family:monospace;
 }
 
 .slot-person{
   margin-bottom:8px;
+
   font-size:13px;
+
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -548,49 +738,70 @@ button:hover{
 
 .slot-actions{
   display:flex;
+
   gap:6px;
 }
 
 .slot-actions button{
   flex:1;
+
   padding:6px;
+
   font-size:10px;
 }
 
-/* GIFTS */
+/* =========================
+   GIFTS
+========================= */
 
 .selected-info{
   padding:10px;
+
   margin-bottom:10px;
+
   border-radius:8px;
+
   background:#0e0f13;
+
   color:#aaa;
+
   font-size:12px;
 }
 
 .gifts{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+
+  grid-template-columns:
+    repeat(4,1fr);
+
   gap:8px;
 }
 
 .gift{
   padding:12px 5px;
+
   border-radius:10px;
+
   border:1px solid #2c2f37;
+
   background:#0e0f13;
+
   text-align:center;
+
   cursor:pointer;
+
   transition:.15s ease;
 }
 
 .gift:hover{
   border-color:#806cff;
+
   transform:translateY(-2px);
 }
 
 .gift-icon{
   margin-bottom:5px;
+
   font-size:27px;
 }
 
@@ -600,32 +811,46 @@ button:hover{
 
 .gift-value{
   margin-top:4px;
+
   color:#8c8f98;
+
   font-size:9px;
 }
 
 .queue-status{
   margin-top:10px;
+
   padding:8px;
+
   border-radius:7px;
+
   background:#0c0d10;
+
   color:#8e929b;
+
   font-size:10px;
 }
 
-/* OUTPUT */
+/* =========================
+   OUTPUT MODE
+========================= */
 
 body.output-mode{
   margin:0;
+
   overflow:hidden;
+
   background:#000;
 }
 
 body.output-mode .app{
   width:100vw;
   height:100vh;
+
   padding:0;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
 }
@@ -641,15 +866,21 @@ body.output-mode .live-side{
 
 body.output-mode .live{
   height:100vh;
+
   width:56.25vh;
+
   max-width:100vw;
+
   max-height:177.777vw;
+
   border-radius:0;
 }
 
 @media(max-width:1100px){
+
   .app{
     flex-direction:column;
+
     align-items:center;
   }
 
@@ -662,6 +893,7 @@ body.output-mode .live{
     width:min(650px,100%);
   }
 }
+
 </style>
 </head>
 
@@ -669,17 +901,25 @@ body.output-mode .live{
 
 <div class="app">
 
+<!-- ======================
+     LIVE
+====================== -->
+
 <div class="live-side">
 
 <div class="live-header">
-  <span>LIVE OUTPUT — 9:16</span>
 
-  <button
-    class="open-output"
-    onclick="openOutputWindow()"
-  >
-    OPEN CLEAN OUTPUT
-  </button>
+<span>
+LIVE OUTPUT — 9:16
+</span>
+
+<button
+  class="open-output"
+  onclick="openOutputWindow()"
+>
+OPEN CLEAN OUTPUT
+</button>
+
 </div>
 
 <div class="live">
@@ -688,16 +928,16 @@ body.output-mode .live{
 
 <div class="host">
 
-  <div
-    id="hostContent"
-    class="host-placeholder"
-  >
-    Add Host Image
-  </div>
+<div
+  id="hostContent"
+  class="host-placeholder"
+>
+Add Host Image
+</div>
 
-  <div class="host-label">
-    Host
-  </div>
+<div class="host-label">
+Host
+</div>
 
 </div>
 
@@ -708,76 +948,51 @@ body.output-mode .live{
   id="liveGuests"
 ></div>
 
-<!-- BOTTOM -->
+<!-- LOWER VIDEO -->
 
 <div class="bottom-zone">
 
-  <div
-    class="comments"
-    id="comments"
-  >
+<div
+  class="gift-stage"
+  id="giftStage"
+>
 
-    <div class="comment">
-      <div class="comment-avatar">A</div>
-      <div class="comment-text">
-        <span class="comment-user">Arman</span><br>
-        Hello 👋
-      </div>
-    </div>
-
-    <div class="comment">
-      <div class="comment-avatar">M</div>
-      <div class="comment-text">
-        <span class="comment-user">Mariam</span><br>
-        🔥🔥🔥
-      </div>
-    </div>
-
-    <div class="comment">
-      <div class="comment-avatar">G</div>
-      <div class="comment-text">
-        <span class="comment-user">Gor</span><br>
-        Nice live!
-      </div>
-    </div>
-
-  </div>
-
-  <!-- IMPORTANT:
-       ONE persistent video element.
-       It is NEVER recreated on another click.
-  -->
-
-  <div
-    class="gift-stage"
-    id="giftStage"
-  >
-    <video
-      id="lionVideo"
-      src="./0818%20(1).mp4"
-      preload="auto"
-      playsinline
-    ></video>
-  </div>
+<video
+  id="lionVideo"
+  src="./0818%20(1).mp4"
+  preload="auto"
+  playsinline
+></video>
 
 </div>
 
 </div>
+
 </div>
 
-<!-- CONTROL PANEL -->
+</div>
+
+<!-- ======================
+     CONTROL
+====================== -->
 
 <div class="panel">
 
-<h1>Live Control Panel</h1>
+<h1>
+Live Control Panel
+</h1>
 
 <div class="subtitle">
-Host • 8 Guests • 120 sec • Safe Gift Queue
+Host • 8 Guests • 120 sec • Gift Queue
 </div>
+
+<!-- HOST -->
 
 <div class="section">
 
-<h2>Host Image</h2>
+<h2>
+Host Image
+</h2>
 
 <input
   type="file"
@@ -787,53 +1002,62 @@ Host • 8 Guests • 120 sec • Safe Gift Queue
 
 </div>
 
+<!-- ADD GUEST -->
+
 <div class="section">
 
-<h2>Quick Guest Add</h2>
+<h2>
+Quick Guest Add
+</h2>
 
 <div class="quick-add">
 
-  <div
-    class="avatar-preview"
-    id="guestPreview"
-  >
-    AVATAR
-  </div>
+<div
+  class="avatar-preview"
+  id="guestPreview"
+>
+AVATAR
+</div>
 
-  <div class="quick-fields">
+<div class="quick-fields">
 
-    <input
-      type="file"
-      id="guestImageInput"
-      accept="image/*"
-    >
+<input
+  type="file"
+  id="guestImageInput"
+  accept="image/*"
+>
 
-    <input
-      type="text"
-      id="guestName"
-      placeholder="Guest name..."
-    >
+<input
+  type="text"
+  id="guestName"
+  placeholder="Guest name..."
+>
 
-    <button
-      class="primary"
-      id="addGuestButton"
-    >
-      ADD GUEST
-    </button>
+<button
+  class="primary"
+  id="addGuestButton"
+>
+ADD GUEST
+</button>
 
-  </div>
+</div>
 
 </div>
 
 <div class="hint">
 Նկար → անուն → ENTER։
+Guest-ը ավտոմատ գնում է առաջին ազատ slot։
 </div>
 
 </div>
+
+<!-- ACTIVE GUESTS -->
 
 <div class="section">
 
-<h2>Active Guests</h2>
+<h2>
+Active Guests
+</h2>
 
 <div
   class="slots"
@@ -842,9 +1066,13 @@ Host • 8 Guests • 120 sec • Safe Gift Queue
 
 </div>
 
+<!-- GIFTS -->
+
 <div class="section">
 
-<h2>Gift Controls</h2>
+<h2>
+Gift Controls
+</h2>
 
 <div
   class="selected-info"
@@ -855,41 +1083,41 @@ Selected guest: none
 
 <div class="gifts">
 
-  <div
-    class="gift"
-    onclick="sendGift('rose')"
-  >
-    <div class="gift-icon">🌹</div>
-    <div class="gift-name">Rose</div>
-    <div class="gift-value">1</div>
-  </div>
+<div
+  class="gift"
+  onclick="sendGift('rose')"
+>
+<div class="gift-icon">🌹</div>
+<div class="gift-name">Rose</div>
+<div class="gift-value">1</div>
+</div>
 
-  <div
-    class="gift"
-    onclick="sendGift('lion')"
-  >
-    <div class="gift-icon">🦁</div>
-    <div class="gift-name">Lion</div>
-    <div class="gift-value">29,999</div>
-  </div>
+<div
+  class="gift"
+  onclick="sendGift('lion')"
+>
+<div class="gift-icon">🦁</div>
+<div class="gift-name">Lion</div>
+<div class="gift-value">29,999</div>
+</div>
 
-  <div
-    class="gift"
-    onclick="sendGift('universe')"
-  >
-    <div class="gift-icon">🌌</div>
-    <div class="gift-name">Universe</div>
-    <div class="gift-value">44,999</div>
-  </div>
+<div
+  class="gift"
+  onclick="sendGift('universe')"
+>
+<div class="gift-icon">🌌</div>
+<div class="gift-name">Universe</div>
+<div class="gift-value">44,999</div>
+</div>
 
-  <div
-    class="gift"
-    onclick="sendGift('santa')"
-  >
-    <div class="gift-icon">🎅</div>
-    <div class="gift-name">Santa</div>
-    <div class="gift-value">25,000</div>
-  </div>
+<div
+  class="gift"
+  onclick="sendGift('santa')"
+>
+<div class="gift-icon">🎅</div>
+<div class="gift-name">Santa</div>
+<div class="gift-value">25,000</div>
+</div>
 
 </div>
 
@@ -913,13 +1141,27 @@ Lion queue: 0
 ========================= */
 
 const MAX_GUESTS = 8;
+
 const GUEST_DURATION = 120;
 
 const GIFTS = {
-  rose:{ value:1 },
-  lion:{ value:29999 },
-  universe:{ value:44999 },
-  santa:{ value:25000 }
+
+  rose:{
+    value:1
+  },
+
+  lion:{
+    value:29999
+  },
+
+  universe:{
+    value:44999
+  },
+
+  santa:{
+    value:25000
+  }
+
 };
 
 /* =========================
@@ -930,24 +1172,26 @@ let guests =
   Array(MAX_GUESTS).fill(null);
 
 let selectedGuest = null;
+
 let pendingGuestImage = null;
+
 let hostImage = null;
 
-/*
-  Robust Lion queue.
-  Each click = one integer in queue.
-*/
+/* =========================
+   LION QUEUE
+========================= */
 
 let pendingLions = 0;
+
 let lionCurrentlyPlaying = false;
 
 /* =========================
-   OUTPUT MODE
+   OUTPUT SYNC
 ========================= */
 
 const channel =
   new BroadcastChannel(
-    "live_guest_studio_queue_v3"
+    "live_guest_final_v4"
   );
 
 const params =
@@ -959,60 +1203,84 @@ const outputMode =
   params.get("mode") === "output";
 
 if(outputMode){
+
   document.body.classList.add(
     "output-mode"
   );
+
 }
 
 /* =========================
-   OUTPUT WINDOW
+   OPEN OUTPUT
 ========================= */
 
 function openOutputWindow(){
 
   window.open(
-    location.pathname + "?mode=output",
+
+    location.pathname +
+    "?mode=output",
+
     "liveOutput",
+
     "width=520,height=920"
+
   );
 
   setTimeout(
     broadcastState,
     700
   );
+
 }
+
+/* =========================
+   CHANNEL
+========================= */
 
 channel.onmessage =
 function(event){
 
-  const m = event.data;
+  const m =
+    event.data;
 
   if(
     outputMode &&
     m.type === "state"
   ){
-    applyRemoteState(m.state);
+
+    applyRemoteState(
+      m.state
+    );
+
   }
 
   if(
     outputMode &&
     m.type === "enqueueLion"
   ){
+
     enqueueLion(false);
+
   }
 
   if(
     !outputMode &&
     m.type === "requestState"
   ){
+
     broadcastState();
+
   }
+
 };
 
 if(outputMode){
+
   channel.postMessage({
     type:"requestState"
   });
+
 }
 
 /* =========================
@@ -1021,17 +1289,25 @@ if(outputMode){
 
 function broadcastState(){
 
-  if(outputMode) return;
+  if(outputMode)
+    return;
 
   channel.postMessage({
+
     type:"state",
 
     state:{
+
       guests,
+
       selectedGuest,
+
       hostImage
+
     }
+
   });
+
 }
 
 function applyRemoteState(state){
@@ -1047,11 +1323,13 @@ function applyRemoteState(state){
     state.hostImage;
 
   renderHost();
+
   renderLiveGuests();
+
 }
 
 /* =========================
-   HOST
+   HOST IMAGE
 ========================= */
 
 const hostInput =
@@ -1068,7 +1346,8 @@ if(hostInput){
       const file =
         event.target.files[0];
 
-      if(!file) return;
+      if(!file)
+        return;
 
       const reader =
         new FileReader();
@@ -1080,12 +1359,18 @@ if(hostInput){
           e.target.result;
 
         renderHost();
+
         broadcastState();
+
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(
+        file
+      );
+
     }
   );
+
 }
 
 function renderHost(){
@@ -1095,7 +1380,8 @@ function renderHost(){
       "hostContent"
     );
 
-  if(!target) return;
+  if(!target)
+    return;
 
   if(!hostImage){
 
@@ -1106,12 +1392,14 @@ function renderHost(){
       "Add Host Image";
 
     return;
+
   }
 
   target.className = "";
 
   target.innerHTML =
     `<img src="${hostImage}">`;
+
 }
 
 /* =========================
@@ -1143,10 +1431,14 @@ if(guestImageInput){
         event.target.files[0];
 
       if(file){
+
         loadGuestImage(file);
+
       }
+
     }
   );
+
 }
 
 function loadGuestImage(file){
@@ -1161,41 +1453,56 @@ function loadGuestImage(file){
       e.target.result;
 
     if(guestPreview){
+
       guestPreview.innerHTML =
         `<img src="${pendingGuestImage}">`;
+
     }
+
   };
 
   reader.readAsDataURL(file);
+
 }
 
-/* paste screenshot */
+/* COPY / PASTE SCREENSHOT */
 
 document.addEventListener(
   "paste",
   function(event){
 
-    if(outputMode) return;
+    if(outputMode)
+      return;
 
     const items =
       event.clipboardData?.items;
 
-    if(!items) return;
+    if(!items)
+      return;
 
-    for(const item of items){
+    for(
+      const item
+      of items
+    ){
 
       if(
         item.type &&
-        item.type.startsWith("image/")
+        item.type.startsWith(
+          "image/"
+        )
       ){
 
         const file =
           item.getAsFile();
 
         loadGuestImage(file);
+
         break;
+
       }
+
     }
+
   }
 );
 
@@ -1205,64 +1512,96 @@ document.addEventListener(
 
 function addGuest(){
 
-  if(outputMode) return;
+  if(outputMode)
+    return;
 
   const name =
     guestName.value.trim();
 
   if(!name){
-    alert("Enter guest name");
+
+    alert(
+      "Enter guest name"
+    );
+
     return;
+
   }
 
   if(!pendingGuestImage){
-    alert("Choose guest image");
+
+    alert(
+      "Choose guest image"
+    );
+
     return;
+
   }
 
   const slot =
     guests.findIndex(
-      g => g === null
+      guest =>
+        guest === null
     );
 
   if(slot === -1){
-    alert("All 8 slots are occupied");
+
+    alert(
+      "All 8 slots are occupied"
+    );
+
     return;
+
   }
 
   guests[slot] = {
-    name,
-    image:pendingGuestImage,
+
+    name:name,
+
+    image:
+      pendingGuestImage,
+
     score:0,
+
     expiresAt:
       Date.now() +
       GUEST_DURATION * 1000
+
   };
 
-  selectedGuest = slot;
+  selectedGuest =
+    slot;
 
-  guestName.value = "";
-  guestImageInput.value = "";
+  guestName.value =
+    "";
 
-  pendingGuestImage = null;
+  guestImageInput.value =
+    "";
+
+  pendingGuestImage =
+    null;
 
   guestPreview.innerHTML =
     "AVATAR";
 
   renderEverything();
+
   broadcastState();
+
 }
 
-const addButton =
+const addGuestButton =
   document.getElementById(
     "addGuestButton"
   );
 
-if(addButton){
-  addButton.addEventListener(
+if(addGuestButton){
+
+  addGuestButton.addEventListener(
     "click",
     addGuest
   );
+
 }
 
 if(guestName){
@@ -1271,37 +1610,61 @@ if(guestName){
     "keydown",
     function(event){
 
-      if(event.key === "Enter"){
+      if(
+        event.key ===
+        "Enter"
+      ){
+
         addGuest();
+
       }
+
     }
   );
+
 }
 
 /* =========================
-   SELECT / REMOVE
+   SELECT
 ========================= */
 
 function selectGuest(index){
 
-  if(!guests[index]) return;
+  if(!guests[index])
+    return;
 
-  selectedGuest = index;
+  selectedGuest =
+    index;
 
   renderEverything();
+
   broadcastState();
+
 }
+
+/* =========================
+   REMOVE
+========================= */
 
 function removeGuest(index){
 
-  guests[index] = null;
+  guests[index] =
+    null;
 
-  if(selectedGuest === index){
-    selectedGuest = null;
+  if(
+    selectedGuest ===
+    index
+  ){
+
+    selectedGuest =
+      null;
+
   }
 
   renderEverything();
+
   broadcastState();
+
 }
 
 /* =========================
@@ -1315,15 +1678,19 @@ function renderLiveGuests(){
       "liveGuests"
     );
 
-  if(!container) return;
+  if(!container)
+    return;
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
   guests.forEach(
     (guest,index)=>{
 
       const box =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       box.className =
         "guest";
@@ -1332,48 +1699,83 @@ function renderLiveGuests(){
         guest &&
         selectedGuest === index
       ){
+
         box.classList.add(
           "selected"
         );
+
       }
 
       if(!guest){
 
         box.innerHTML = `
+
           <div class="guest-empty">
-            <div class="empty-plus">+</div>
-            <div>Request</div>
+
+            <div class="empty-plus">
+              +
+            </div>
+
+            <div>
+              Request
+            </div>
+
           </div>
+
         `;
+
       }
+
       else{
 
         box.innerHTML = `
-          <img src="${guest.image}">
+
+          <img
+            src="${guest.image}"
+          >
 
           <div class="guest-score">
-            <span class="score-icon">◆</span>
+
+            <span class="score-icon">
+              ◆
+            </span>
+
             <span>
+
               ${Number(
                 guest.score
               ).toLocaleString()}
+
             </span>
+
           </div>
 
           <div class="guest-name">
-            ${escapeHTML(guest.name)}
-            <span class="guest-plus">+</span>
+
+            ${escapeHTML(
+              guest.name
+            )}
+
+            <span class="guest-plus">
+              +
+            </span>
+
           </div>
 
           <div class="guest-muted">
-            🎙̸
           </div>
+
         `;
+
       }
 
-      container.appendChild(box);
+      container.appendChild(
+        box
+      );
+
     }
   );
+
 }
 
 /* =========================
@@ -1387,34 +1789,46 @@ function renderControlSlots(){
       "controlSlots"
     );
 
-  if(!container) return;
+  if(!container)
+    return;
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
   guests.forEach(
     (guest,index)=>{
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       card.className =
         "slot-card";
 
       if(
-        selectedGuest === index
+        selectedGuest ===
+        index
       ){
+
         card.classList.add(
           "active"
         );
+
       }
 
       if(!guest){
 
         card.innerHTML = `
+
           <div class="slot-top">
+
             <span class="slot-number">
+
               SLOT ${index + 1}
+
             </span>
+
           </div>
 
           <div
@@ -1423,36 +1837,55 @@ function renderControlSlots(){
           >
             EMPTY
           </div>
+
         `;
+
       }
+
       else{
 
         const timeLeft =
           Math.max(
+
             0,
+
             Math.ceil(
+
               (
                 guest.expiresAt -
                 Date.now()
               ) / 1000
+
             )
+
           );
 
         card.innerHTML = `
+
           <div class="slot-top">
 
             <span class="slot-number">
+
               SLOT ${index + 1}
+
             </span>
 
             <span class="timer">
-              ${formatTime(timeLeft)}
+
+              ${formatTime(
+                timeLeft
+              )}
+
             </span>
 
           </div>
 
           <div class="slot-person">
-            ${escapeHTML(guest.name)}
+
+            ${escapeHTML(
+              guest.name
+            )}
+
           </div>
 
           <div class="slot-actions">
@@ -1471,16 +1904,22 @@ function renderControlSlots(){
             </button>
 
           </div>
+
         `;
+
       }
 
-      container.appendChild(card);
+      container.appendChild(
+        card
+      );
+
     }
   );
+
 }
 
 /* =========================
-   SELECTED
+   SELECTED INFO
 ========================= */
 
 function renderSelectedInfo(){
@@ -1490,15 +1929,19 @@ function renderSelectedInfo(){
       "selectedInfo"
     );
 
-  if(!info) return;
+  if(!info)
+    return;
 
   if(
     selectedGuest === null ||
     !guests[selectedGuest]
   ){
+
     info.textContent =
       "Selected guest: none";
+
     return;
+
   }
 
   info.textContent =
@@ -1506,6 +1949,7 @@ function renderSelectedInfo(){
     guests[selectedGuest].name +
     " — Slot " +
     (selectedGuest + 1);
+
 }
 
 /* =========================
@@ -1514,51 +1958,60 @@ function renderSelectedInfo(){
 
 function sendGift(type){
 
-  if(outputMode) return;
+  if(outputMode)
+    return;
 
   if(
     selectedGuest === null ||
     !guests[selectedGuest]
   ){
-    alert("First select a guest");
+
+    alert(
+      "First select a guest"
+    );
+
     return;
+
   }
 
   const gift =
     GIFTS[type];
 
-  if(!gift) return;
-
-  /*
-    Score adds immediately.
-  */
+  if(!gift)
+    return;
 
   guests[selectedGuest].score +=
     gift.value;
 
   renderEverything();
+
   broadcastState();
 
-  if(type === "lion"){
+  if(
+    type ===
+    "lion"
+  ){
 
-    /*
-      Add ONE lion locally.
-    */
+    enqueueLion(
+      true
+    );
 
-    enqueueLion(true);
   }
+
 }
 
 /* =========================
-   ROBUST LION QUEUE
+   LION QUEUE
 ========================= */
 
-function enqueueLion(notifyOutput){
+function enqueueLion(
+  notifyOutput
+){
 
   /*
-    IMPORTANT:
-    Only increase the queue counter.
-    Never touch video.currentTime here.
+    ԿԱՐԵՎՈՐ.
+    click-ը միայն հերթն է մեծացնում։
+    video currentTime-ին ձեռք չի տալիս։
   */
 
   pendingLions++;
@@ -1569,41 +2022,53 @@ function enqueueLion(notifyOutput){
     notifyOutput &&
     !outputMode
   ){
+
     channel.postMessage({
       type:"enqueueLion"
     });
+
   }
 
   /*
-    If something is already playing,
-    stop here.
+    Եթե արդեն գնում է,
+    ոչինչ չենք restart անում։
   */
 
-  if(lionCurrentlyPlaying){
+  if(
+    lionCurrentlyPlaying
+  ){
+
     return;
+
   }
 
   startNextLion();
+
 }
 
 /* =========================
-   PLAY EXACTLY ONE
+   START NEXT LION
 ========================= */
 
 function startNextLion(){
 
-  if(pendingLions <= 0){
+  if(
+    pendingLions <= 0
+  ){
 
-    lionCurrentlyPlaying = false;
+    lionCurrentlyPlaying =
+      false;
 
-    endLionMode();
+    finishLionMode();
 
     updateQueueStatus();
 
     return;
+
   }
 
-  lionCurrentlyPlaying = true;
+  lionCurrentlyPlaying =
+    true;
 
   pendingLions--;
 
@@ -1612,11 +2077,6 @@ function startNextLion(){
   const stage =
     document.getElementById(
       "giftStage"
-    );
-
-  const comments =
-    document.getElementById(
-      "comments"
     );
 
   const video =
@@ -1629,19 +2089,11 @@ function startNextLion(){
     !video
   ){
 
-    lionCurrentlyPlaying = false;
+    lionCurrentlyPlaying =
+      false;
+
     return;
-  }
 
-  /*
-    Keep comments hidden while
-    ANY lion remains in the sequence.
-  */
-
-  if(comments){
-    comments.classList.add(
-      "hidden"
-    );
   }
 
   stage.classList.add(
@@ -1649,22 +2101,30 @@ function startNextLion(){
   );
 
   /*
-    This currentTime reset happens ONLY
-    when we intentionally start the NEXT
-    item from the queue.
-    Never on an extra click.
+    Reset ONLY այստեղ.
+    Այս ֆունկցիան չի կանչվում
+    երկրորդ click-ից, եթե
+    video արդեն խաղում է։
   */
 
-  video.pause();
+  try{
 
-  video.currentTime = 0;
+    video.currentTime =
+      0;
 
-  const playPromise =
+  }
+  catch(error){
+
+    console.log(error);
+
+  }
+
+  const promise =
     video.play();
 
-  if(playPromise){
+  if(promise){
 
-    playPromise.catch(
+    promise.catch(
       function(error){
 
         console.error(
@@ -1672,57 +2132,45 @@ function startNextLion(){
           error
         );
 
-        /*
-          Prevent queue deadlock
-          if playback fails.
-        */
-
-        lionCurrentlyPlaying = false;
+        lionCurrentlyPlaying =
+          false;
 
       }
     );
+
   }
+
 }
 
 /* =========================
-   SINGLE ENDED HANDLER
+   ONE VIDEO END HANDLER
 ========================= */
 
-/*
-  Register only ONE handler once.
-  It cannot be replaced on each click.
-*/
-
-const persistentLionVideo =
+const lionVideo =
   document.getElementById(
     "lionVideo"
   );
 
-if(persistentLionVideo){
+if(lionVideo){
 
-  persistentLionVideo.addEventListener(
+  lionVideo.addEventListener(
     "ended",
     function(){
 
-      /*
-        Current item finished.
-      */
+      lionCurrentlyPlaying =
+        false;
 
-      lionCurrentlyPlaying = false;
-
-      /*
-        If another Lion is waiting,
-        start it NOW.
-      */
-
-      if(pendingLions > 0){
+      if(
+        pendingLions > 0
+      ){
 
         startNextLion();
 
       }
+
       else{
 
-        endLionMode();
+        finishLionMode();
 
       }
 
@@ -1730,35 +2178,28 @@ if(persistentLionVideo){
 
     }
   );
+
 }
 
 /* =========================
-   END LION MODE
+   END VIDEO AREA
 ========================= */
 
-function endLionMode(){
+function finishLionMode(){
 
   const stage =
     document.getElementById(
       "giftStage"
     );
 
-  const comments =
-    document.getElementById(
-      "comments"
-    );
-
   if(stage){
+
     stage.classList.remove(
       "active"
     );
+
   }
 
-  if(comments){
-    comments.classList.remove(
-      "hidden"
-    );
-  }
 }
 
 /* =========================
@@ -1772,7 +2213,8 @@ function updateQueueStatus(){
       "queueStatus"
     );
 
-  if(!status) return;
+  if(!status)
+    return;
 
   status.textContent =
     "Lion queue: " +
@@ -1782,6 +2224,7 @@ function updateQueueStatus(){
         ? " • playing"
         : ""
     );
+
 }
 
 /* =========================
@@ -1791,30 +2234,41 @@ function updateQueueStatus(){
 setInterval(
   function(){
 
-    if(outputMode) return;
+    if(outputMode)
+      return;
 
-    let changed = false;
+    let changed =
+      false;
 
     guests.forEach(
       (guest,index)=>{
 
-        if(!guest) return;
+        if(!guest)
+          return;
 
         if(
           Date.now() >=
           guest.expiresAt
         ){
 
-          guests[index] = null;
+          guests[index] =
+            null;
 
           if(
-            selectedGuest === index
+            selectedGuest ===
+            index
           ){
-            selectedGuest = null;
+
+            selectedGuest =
+              null;
+
           }
 
-          changed = true;
+          changed =
+            true;
+
         }
+
       }
     );
 
@@ -1823,7 +2277,9 @@ setInterval(
     if(changed){
 
       renderEverything();
+
       broadcastState();
+
     }
 
   },
@@ -1831,34 +2287,42 @@ setInterval(
 );
 
 /* =========================
-   HOTKEYS
+   HOTKEY 1-8
 ========================= */
 
 document.addEventListener(
   "keydown",
   function(event){
 
-    if(outputMode) return;
+    if(outputMode)
+      return;
 
     if(
       document.activeElement &&
       document.activeElement.tagName ===
       "INPUT"
     ){
+
       return;
+
     }
 
     const number =
-      Number(event.key);
+      Number(
+        event.key
+      );
 
     if(
       number >= 1 &&
       number <= 8
     ){
+
       selectGuest(
         number - 1
       );
+
     }
+
   }
 );
 
@@ -1869,28 +2333,47 @@ document.addEventListener(
 function formatTime(seconds){
 
   const min =
-    Math.floor(seconds / 60);
+    Math.floor(
+      seconds / 60
+    );
 
   const sec =
     seconds % 60;
 
   return(
-    String(min).padStart(2,"0")
+
+    String(min).padStart(
+      2,
+      "0"
+    )
+
     +
+
     ":"
+
     +
-    String(sec).padStart(2,"0")
+
+    String(sec).padStart(
+      2,
+      "0"
+    )
+
   );
+
 }
 
 function escapeHTML(text){
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  div.textContent = text;
+  div.textContent =
+    text;
 
   return div.innerHTML;
+
 }
 
 /* =========================
@@ -1900,10 +2383,15 @@ function escapeHTML(text){
 function renderEverything(){
 
   renderHost();
+
   renderLiveGuests();
+
   renderControlSlots();
+
   renderSelectedInfo();
+
   updateQueueStatus();
+
 }
 
 renderEverything();
