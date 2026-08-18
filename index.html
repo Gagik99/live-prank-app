@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,905 +11,861 @@
 <style>
 
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-html,body{
-  min-height:100%;
-  background:#08090d;
-  color:white;
-  font-family:Arial,Helvetica,sans-serif;
+html,
+body{
+    min-height:100%;
+    background:#08090d;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-button,input{
-  font:inherit;
+button,
+input{
+    font:inherit;
 }
 
 button{
-  cursor:pointer;
+    cursor:pointer;
 }
 
-/* =========================================
-   MAIN APP
-========================================= */
+/* =========================
+   MAIN
+========================= */
 
 .app{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  gap:24px;
-  padding:20px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:24px;
+    padding:20px;
 }
 
-/* =========================================
-   LIVE SIDE
-========================================= */
-
 .live-side{
-  position:sticky;
-  top:20px;
+    position:sticky;
+    top:20px;
 }
 
 .live-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
 }
 
 .live-header span{
-  font-size:12px;
-  color:#858892;
+    font-size:12px;
+    color:#858892;
 }
 
 .open-output{
-  background:#181a20;
-  border:1px solid #343740;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:8px;
+    background:#181a20;
+    border:1px solid #343740;
+    color:#fff;
+    padding:8px 12px;
+    border-radius:8px;
 }
 
-/* =========================================
-   9:16 OUTPUT
-========================================= */
+/* =========================
+   LIVE 9:16
+========================= */
 
 .live{
-  position:relative;
+    position:relative;
 
-  width:405px;
-  height:720px;
+    width:405px;
+    height:720px;
 
-  background:#08090c;
+    background:#08090c;
 
-  overflow:hidden;
+    overflow:hidden;
 
-  border-radius:12px;
+    border-radius:12px;
 
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.45);
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
 }
 
-/* =========================================
+/* =========================
    HOST
-========================================= */
+========================= */
 
 .host{
-  position:absolute;
+    position:absolute;
 
-  left:0;
-  top:0;
+    left:0;
+    top:0;
 
-  width:58%;
-  height:72%;
+    width:58%;
+    height:72%;
 
-  background:#111319;
+    background:#111319;
 
-  overflow:hidden;
+    overflow:hidden;
 }
 
 .host img{
-  width:100%;
-  height:100%;
+    width:100%;
+    height:100%;
 
-  object-fit:cover;
-  object-position:center;
+    object-fit:cover;
+    object-position:center;
 
-  display:block;
+    display:block;
 }
 
 .host-placeholder{
-  width:100%;
-  height:100%;
+    width:100%;
+    height:100%;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-  text-align:center;
+    text-align:center;
 
-  color:#656872;
+    color:#656872;
 
-  background:
-    radial-gradient(circle at 40% 30%,#1d2742,transparent 35%),
-    radial-gradient(circle at 60% 75%,#2b172e,transparent 40%),
-    #0b0c10;
+    background:
+        radial-gradient(circle at 40% 30%,#1d2742,transparent 35%),
+        radial-gradient(circle at 60% 75%,#2b172e,transparent 40%),
+        #0b0c10;
 }
-
-/* HOST LABEL */
 
 .host-label{
-  position:absolute;
+    position:absolute;
 
-  left:8px;
-  bottom:8px;
+    left:8px;
+    top:8px;
 
-  background:rgba(0,0,0,.58);
+    background:rgba(0,0,0,.60);
 
-  padding:4px 7px;
+    padding:4px 7px;
 
-  border-radius:5px;
+    border-radius:5px;
 
-  font-size:10px;
+    font-size:10px;
 
-  backdrop-filter:blur(5px);
+    backdrop-filter:blur(5px);
 }
 
-/* =========================================
-   GUEST AREA
-========================================= */
+/* =========================
+   GUEST GRID
+========================= */
 
 .guests{
-  position:absolute;
+    position:absolute;
 
-  right:0;
-  top:0;
+    right:0;
+    top:0;
 
-  width:42%;
-  height:72%;
+    width:42%;
+    height:72%;
 
-  display:grid;
+    display:grid;
 
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:repeat(4,1fr);
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:repeat(4,1fr);
 
-  gap:2px;
+    gap:2px;
 
-  background:#050608;
+    background:#050608;
 }
 
-/* =========================================
-   GUEST SLOT
-========================================= */
-
 .guest{
-  position:relative;
+    position:relative;
 
-  overflow:hidden;
+    overflow:hidden;
 
-  background:#17191f;
+    background:#17191f;
 
-  border:1px solid rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .guest.selected{
-  box-shadow:
-    inset 0 0 0 2px rgba(175,145,255,.95);
+    box-shadow:
+        inset 0 0 0 2px rgba(175,145,255,.95);
 }
 
 .guest img{
-  width:100%;
-  height:100%;
+    width:100%;
+    height:100%;
 
-  object-fit:cover;
+    object-fit:cover;
 
-  display:block;
+    display:block;
 }
 
-/* DARK GRADIENT */
-
 .guest::after{
-  content:"";
+    content:"";
 
-  position:absolute;
+    position:absolute;
 
-  left:0;
-  right:0;
-  bottom:0;
+    left:0;
+    right:0;
+    bottom:0;
 
-  height:42%;
+    height:45%;
 
-  background:
-    linear-gradient(
-      transparent,
-      rgba(0,0,0,.68)
-    );
+    background:
+        linear-gradient(
+            transparent,
+            rgba(0,0,0,.72)
+        );
 
-  pointer-events:none;
+    pointer-events:none;
 }
 
 /* SCORE */
 
 .guest-score{
-  position:absolute;
+    position:absolute;
 
-  left:4px;
-  top:4px;
+    left:4px;
+    top:4px;
 
-  z-index:3;
+    z-index:3;
 
-  display:flex;
-  align-items:center;
-  gap:3px;
+    display:flex;
+    align-items:center;
+    gap:3px;
 
-  padding:3px 5px;
+    padding:3px 5px;
 
-  border-radius:5px;
+    border-radius:5px;
 
-  background:rgba(0,0,0,.62);
+    background:rgba(0,0,0,.68);
 
-  backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
 
-  font-size:8px;
+    font-size:8px;
 
-  font-weight:bold;
+    font-weight:bold;
 }
 
 .score-icon{
-  font-size:8px;
+    width:10px;
+    height:10px;
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#65e6ff;
+
+    color:white;
+
+    font-size:6px;
 }
 
 /* NAME */
 
 .guest-name{
-  position:absolute;
+    position:absolute;
 
-  left:5px;
-  right:22px;
-  bottom:5px;
+    left:5px;
+    right:23px;
+    bottom:5px;
 
-  z-index:4;
+    z-index:4;
 
-  font-size:8px;
+    font-size:8px;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 
-  text-shadow:
-    0 1px 3px #000;
+    text-shadow:
+        0 1px 3px #000;
 }
-
-/* PLUS */
 
 .guest-plus{
-  display:inline-flex;
+    display:inline-flex;
 
-  align-items:center;
-  justify-content:center;
+    align-items:center;
+    justify-content:center;
 
-  width:11px;
-  height:11px;
+    width:12px;
+    height:12px;
 
-  margin-left:3px;
+    margin-left:3px;
 
-  border-radius:50%;
+    border-radius:50%;
 
-  background:#ff2c65;
+    background:#767981;
 
-  color:white;
+    color:white;
 
-  font-size:9px;
-  font-weight:bold;
+    font-size:9px;
 }
 
-/* MUTED MIC */
+/* MUTED */
 
 .guest-muted{
-  position:absolute;
+    position:absolute;
 
-  right:5px;
-  bottom:5px;
+    right:5px;
+    bottom:5px;
 
-  z-index:5;
+    z-index:5;
 
-  width:15px;
-  height:15px;
+    color:white;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    font-size:12px;
 
-  border-radius:50%;
-
-  background:rgba(0,0,0,.65);
-
-  font-size:9px;
+    text-shadow:
+        0 1px 4px #000;
 }
 
-/* EMPTY */
+/* EMPTY SLOT */
 
 .guest-empty{
-  width:100%;
-  height:100%;
+    width:100%;
+    height:100%;
 
-  display:flex;
-  flex-direction:column;
+    display:flex;
+    flex-direction:column;
 
-  align-items:center;
-  justify-content:center;
+    align-items:center;
+    justify-content:center;
 
-  gap:4px;
+    gap:5px;
 
-  color:#666;
+    color:#666;
 
-  font-size:8px;
+    font-size:8px;
 }
 
 .empty-plus{
-  width:26px;
-  height:26px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-
-  border:1px solid #555;
-
-  font-size:18px;
-
-  color:#aaa;
+    font-size:27px;
+    color:#999;
 }
 
-/* =========================================
-   LOWER AREA
-========================================= */
+/* =========================
+   BOTTOM ZONE
+========================= */
 
 .bottom-zone{
-  position:absolute;
+    position:absolute;
 
-  left:0;
-  bottom:0;
+    left:0;
+    bottom:0;
 
-  width:100%;
-  height:28%;
+    width:100%;
+    height:28%;
 
-  overflow:hidden;
+    overflow:hidden;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(7,8,11,.90),
-      #050608
-    );
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7,8,11,.90),
+            #050608
+        );
 }
 
-/* =========================================
+/* =========================
    COMMENTS
-========================================= */
+========================= */
 
 .comments{
-  position:absolute;
+    position:absolute;
 
-  inset:0;
+    inset:0;
 
-  padding:12px 12px 10px;
+    padding:12px;
 
-  transition:
-    opacity .25s ease,
-    transform .25s ease;
+    z-index:5;
 
-  z-index:5;
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
 }
 
 .comments.hidden{
-  opacity:0;
+    opacity:0;
 
-  transform:
-    translateY(10px);
+    transform:
+        translateY(10px);
 
-  pointer-events:none;
+    pointer-events:none;
 }
 
 .comment{
-  display:flex;
+    display:flex;
 
-  align-items:flex-start;
+    align-items:flex-start;
 
-  gap:6px;
+    gap:6px;
 
-  margin-bottom:7px;
+    margin-bottom:7px;
 
-  font-size:10px;
-
-  text-shadow:
-    0 1px 3px #000;
+    font-size:10px;
 }
 
 .comment-avatar{
-  width:20px;
-  height:20px;
+    width:21px;
+    height:21px;
 
-  flex-shrink:0;
+    flex-shrink:0;
 
-  border-radius:50%;
+    border-radius:50%;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    display:flex;
 
-  background:#30333d;
+    align-items:center;
+    justify-content:center;
 
-  font-size:8px;
-}
+    background:#30333d;
 
-.comment-text{
-  line-height:1.25;
+    font-size:8px;
 }
 
 .comment-user{
-  color:#9fa2aa;
+    color:#a9abb3;
 
-  font-weight:bold;
+    font-weight:bold;
 }
 
-/* =========================================
-   TIKFINITY GIFT AREA
-========================================= */
+.comment-text{
+    line-height:1.3;
+}
+
+/* =========================
+   GIFT VIDEO AREA
+========================= */
 
 .gift-stage{
-  position:absolute;
+    position:absolute;
 
-  inset:0;
+    inset:0;
 
-  z-index:10;
+    z-index:10;
 
-  opacity:0;
+    opacity:0;
 
-  pointer-events:none;
+    pointer-events:none;
 
-  transform:
-    translateY(8px);
+    background:#000;
 
-  transition:
-    opacity .2s ease,
-    transform .2s ease;
-
-  overflow:hidden;
-
-  background:#000;
+    transition:
+        opacity .15s ease;
 }
 
 .gift-stage.active{
-  opacity:1;
-
-  transform:
-    translateY(0);
+    opacity:1;
 }
 
-/*
- TikFinity Screen 1
-*/
+.gift-stage video{
+    width:100%;
+    height:100%;
 
-.tikfinity-frame{
-  position:absolute;
+    display:block;
 
-  left:0;
-  top:0;
+    object-fit:cover;
 
-  width:100%;
-  height:100%;
-
-  border:0;
-
-  background:transparent;
+    background:#000;
 }
 
-/* =========================================
+/* =========================
    CONTROL PANEL
-========================================= */
+========================= */
 
 .panel{
-  width:650px;
+    width:650px;
 
-  padding:18px;
+    padding:18px;
 
-  border-radius:14px;
+    border-radius:14px;
 
-  border:1px solid #292c34;
+    border:1px solid #292c34;
 
-  background:#111217;
+    background:#111217;
 }
 
 .panel h1{
-  font-size:21px;
+    font-size:21px;
 
-  margin-bottom:5px;
+    margin-bottom:5px;
 }
 
 .subtitle{
-  color:#81848d;
+    color:#81848d;
 
-  font-size:12px;
+    font-size:12px;
 
-  margin-bottom:18px;
+    margin-bottom:18px;
 }
 
 .section{
-  padding:15px;
+    padding:15px;
 
-  margin-bottom:14px;
+    margin-bottom:14px;
 
-  border-radius:11px;
+    border-radius:11px;
 
-  border:1px solid #292c34;
+    border:1px solid #292c34;
 
-  background:#17181e;
+    background:#17181e;
 }
 
 .section h2{
-  font-size:15px;
+    font-size:15px;
 
-  margin-bottom:12px;
+    margin-bottom:12px;
 }
 
-/* INPUTS */
+/* INPUT */
 
 input{
-  width:100%;
+    width:100%;
 
-  padding:10px;
+    padding:10px;
 
-  border-radius:8px;
+    border-radius:8px;
 
-  border:1px solid #363943;
+    border:1px solid #363943;
 
-  background:#0d0e12;
+    background:#0d0e12;
 
-  color:#fff;
+    color:#fff;
 
-  outline:none;
+    outline:none;
 }
 
 input:focus{
-  border-color:#826fff;
+    border-color:#826fff;
 }
 
 /* BUTTON */
 
 button{
-  padding:9px 12px;
+    padding:9px 12px;
 
-  border:none;
+    border:none;
 
-  border-radius:8px;
+    border-radius:8px;
 
-  color:white;
+    color:white;
 
-  background:#2b2e36;
+    background:#2b2e36;
 
-  font-weight:bold;
+    font-weight:bold;
 }
 
 button:hover{
-  background:#393d48;
+    background:#393d48;
 }
 
 .primary{
-  background:#735dff;
+    background:#735dff;
 }
 
 .primary:hover{
-  background:#826eff;
+    background:#826eff;
 }
 
 .danger{
-  background:#4c2028;
+    background:#4c2028;
 
-  color:#ff8491;
+    color:#ff8491;
 }
 
-/* =========================================
+/* =========================
    QUICK ADD
-========================================= */
+========================= */
 
 .quick-add{
-  display:flex;
+    display:flex;
 
-  align-items:center;
+    align-items:center;
 
-  gap:12px;
+    gap:12px;
 }
 
 .avatar-preview{
-  width:78px;
-  height:78px;
+    width:78px;
+    height:78px;
 
-  flex-shrink:0;
+    flex-shrink:0;
 
-  overflow:hidden;
+    overflow:hidden;
 
-  border-radius:9px;
+    border-radius:9px;
 
-  border:1px dashed #484b55;
+    border:1px dashed #484b55;
 
-  background:#0d0e12;
+    background:#0d0e12;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    display:flex;
 
-  color:#676a72;
+    align-items:center;
+    justify-content:center;
 
-  font-size:10px;
+    color:#676a72;
+
+    font-size:10px;
 }
 
 .avatar-preview img{
-  width:100%;
-  height:100%;
+    width:100%;
+    height:100%;
 
-  object-fit:cover;
+    object-fit:cover;
 }
 
 .quick-fields{
-  flex:1;
+    flex:1;
 }
 
 .quick-fields input{
-  margin-bottom:8px;
+    margin-bottom:8px;
 }
 
 .hint{
-  margin-top:8px;
+    margin-top:8px;
 
-  color:#777b84;
+    color:#777b84;
 
-  font-size:11px;
+    font-size:11px;
 
-  line-height:1.4;
+    line-height:1.4;
 }
 
-/* =========================================
-   CONTROL SLOTS
-========================================= */
+/* =========================
+   ACTIVE SLOTS
+========================= */
 
 .slots{
-  display:grid;
+    display:grid;
 
-  grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr 1fr;
 
-  gap:8px;
+    gap:8px;
 }
 
 .slot-card{
-  min-height:92px;
+    min-height:92px;
 
-  padding:10px;
+    padding:10px;
 
-  border-radius:9px;
+    border-radius:9px;
 
-  border:1px solid #2d3038;
+    border:1px solid #2d3038;
 
-  background:#0e0f13;
+    background:#0e0f13;
 }
 
 .slot-card.active{
-  border-color:#826eff;
+    border-color:#826eff;
 
-  box-shadow:
-    0 0 0 1px rgba(130,110,255,.25);
+    box-shadow:
+        0 0 0 1px rgba(130,110,255,.25);
 }
 
 .slot-top{
-  display:flex;
+    display:flex;
 
-  justify-content:space-between;
+    justify-content:space-between;
 
-  align-items:center;
+    align-items:center;
 
-  margin-bottom:7px;
+    margin-bottom:7px;
 }
 
 .slot-number{
-  color:#777b84;
+    color:#777b84;
 
-  font-size:10px;
+    font-size:10px;
 }
 
 .timer{
-  color:#70f5a2;
+    color:#70f5a2;
 
-  font-family:monospace;
+    font-family:monospace;
 
-  font-size:12px;
+    font-size:12px;
 }
 
 .slot-person{
-  margin-bottom:8px;
+    margin-bottom:8px;
 
-  font-size:13px;
+    font-size:13px;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .slot-actions{
-  display:flex;
+    display:flex;
 
-  gap:6px;
+    gap:6px;
 }
 
 .slot-actions button{
-  flex:1;
+    flex:1;
 
-  padding:6px;
+    padding:6px;
 
-  font-size:10px;
+    font-size:10px;
 }
 
-/* =========================================
-   GIFT PANEL
-========================================= */
+/* =========================
+   GIFTS
+========================= */
 
 .selected-info{
-  padding:10px;
+    padding:10px;
 
-  margin-bottom:10px;
+    margin-bottom:10px;
 
-  border-radius:8px;
+    border-radius:8px;
 
-  background:#0e0f13;
+    background:#0e0f13;
 
-  color:#aaa;
+    color:#aaa;
 
-  font-size:12px;
+    font-size:12px;
 }
 
 .gifts{
-  display:grid;
+    display:grid;
 
-  grid-template-columns:
-    repeat(4,1fr);
+    grid-template-columns:
+        repeat(4,1fr);
 
-  gap:8px;
+    gap:8px;
 }
 
 .gift{
-  padding:12px 5px;
+    padding:12px 5px;
 
-  border-radius:10px;
+    border-radius:10px;
 
-  border:1px solid #2c2f37;
+    border:1px solid #2c2f37;
 
-  background:#0e0f13;
+    background:#0e0f13;
 
-  text-align:center;
+    text-align:center;
 
-  cursor:pointer;
+    cursor:pointer;
 
-  transition:.15s ease;
+    transition:.15s ease;
 }
 
 .gift:hover{
-  border-color:#806cff;
+    border-color:#806cff;
 
-  transform:
-    translateY(-2px);
+    transform:
+        translateY(-2px);
 }
 
 .gift-icon{
-  margin-bottom:5px;
+    margin-bottom:5px;
 
-  font-size:27px;
+    font-size:27px;
 }
 
 .gift-name{
-  font-size:11px;
+    font-size:11px;
 }
 
 .gift-value{
-  margin-top:4px;
+    margin-top:4px;
 
-  color:#8c8f98;
+    color:#8c8f98;
 
-  font-size:9px;
+    font-size:9px;
 }
 
-/* =========================================
-   COMMENT CONTROLS
-========================================= */
-
-.comment-controls{
-  display:grid;
-
-  grid-template-columns:1fr auto;
-
-  gap:8px;
-}
-
-/* =========================================
+/* =========================
    OUTPUT MODE
-========================================= */
+========================= */
 
 body.output-mode{
-  margin:0;
+    margin:0;
 
-  overflow:hidden;
+    overflow:hidden;
 
-  background:#000;
+    background:#000;
 }
 
 body.output-mode .app{
-  width:100vw;
-  height:100vh;
+    width:100vw;
+    height:100vh;
 
-  padding:0;
+    padding:0;
 
-  display:flex;
+    display:flex;
 
-  align-items:center;
-  justify-content:center;
+    align-items:center;
+    justify-content:center;
 }
 
 body.output-mode .panel,
 body.output-mode .live-header{
-  display:none;
+    display:none;
 }
 
 body.output-mode .live-side{
-  position:static;
+    position:static;
 }
 
 body.output-mode .live{
-  height:100vh;
+    height:100vh;
 
-  width:56.25vh;
+    width:56.25vh;
 
-  max-width:100vw;
+    max-width:100vw;
 
-  max-height:177.777vw;
+    max-height:177.777vw;
 
-  border-radius:0;
+    border-radius:0;
 }
 
-/* =========================================
+/* =========================
    RESPONSIVE
-========================================= */
+========================= */
 
 @media(max-width:1100px){
 
-  .app{
-    flex-direction:column;
+    .app{
+        flex-direction:column;
 
-    align-items:center;
-  }
+        align-items:center;
+    }
 
-  .live-side{
-    position:relative;
+    .live-side{
+        position:relative;
 
-    top:0;
-  }
+        top:0;
+    }
 
-  .panel{
-    width:min(650px,100%);
-  }
+    .panel{
+        width:min(650px,100%);
+    }
+
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-<!-- =====================================
-     LIVE
-===================================== -->
+<!-- =========================
+     LIVE OUTPUT
+========================= -->
 
 <div class="live-side">
 
@@ -943,7 +901,7 @@ Add Host Image
 </div>
 
 <div class="host-label">
-HOST
+Host
 </div>
 
 </div>
@@ -956,7 +914,7 @@ id="liveGuests"
 >
 </div>
 
-<!-- LOWER AREA -->
+<!-- BOTTOM -->
 
 <div class="bottom-zone">
 
@@ -1029,31 +987,23 @@ Nice live!
 
 </div>
 
-<!-- GIFT STAGE -->
+<!-- VIDEO AREA -->
 
 <div
 class="gift-stage"
 id="giftStage"
 >
-
-<iframe
-id="tikfinityFrame"
-class="tikfinity-frame"
-src="https://tikfinity.zerody.one/widget/myactions?cid=3591136&screen=1"
-allow="autoplay"
->
-</iframe>
+</div>
 
 </div>
 
 </div>
 
 </div>
-</div>
 
-<!-- =====================================
+<!-- =========================
      CONTROL PANEL
-===================================== -->
+========================= -->
 
 <div class="panel">
 
@@ -1062,7 +1012,7 @@ Live Control Panel
 </h1>
 
 <div class="subtitle">
-Host • 8 Guests • 120 sec • Gift Control
+Host • 8 Guests • 120 sec • Gift Queue
 </div>
 
 <!-- HOST -->
@@ -1124,13 +1074,13 @@ ADD GUEST
 </div>
 
 <div class="hint">
-Ընտրիր նկարը → գրիր անունը → ENTER։
-Հյուրը ավտոմատ կավելանա առաջին ազատ slot-ում։
+Նկար → անուն → ENTER։
+Հյուրը ավտոմատ ավելանում է առաջին ազատ slot-ում։
 </div>
 
 </div>
 
-<!-- ACTIVE GUESTS -->
+<!-- GUESTS -->
 
 <div class="section">
 
@@ -1242,63 +1192,8 @@ Santa
 </div>
 
 <div class="hint">
-Նախ ընտրիր հյուրին։
-Gift սեղմելիս տվյալ հյուրի score-ը կավելանա։
-Lion-ը հիմա 29,999 է։
-</div>
-
-</div>
-
-<!-- COMMENT TEST -->
-
-<div class="section">
-
-<h2>
-Comment Test
-</h2>
-
-<div class="comment-controls">
-
-<input
-id="commentInput"
-type="text"
-placeholder="Write test comment..."
->
-
-<button
-onclick="addComment()"
->
-ADD
-</button>
-
-</div>
-
-</div>
-
-<!-- GIFT VIEW TEST -->
-
-<div class="section">
-
-<h2>
-TikFinity Overlay Test
-</h2>
-
-<button
-class="primary"
-onclick="showGiftStage(12000)"
->
-SHOW GIFT AREA
-</button>
-
-<button
-onclick="hideGiftStage()"
->
-HIDE
-</button>
-
-<div class="hint">
-Այս կոճակը միայն ցույց է տալիս ներքևի TikFinity Screen 1-ը։
-Իրական Lion action-ը գործարկվում է TikFinity-ից։
+Lion-ի յուրաքանչյուր սեղմումը առանձին event է։
+Եթե նախորդ Lion-ը դեռ խաղում է, հաջորդը հերթում կսպասի։
 </div>
 
 </div>
@@ -1309,49 +1204,40 @@ HIDE
 
 <script>
 
-/* =========================================
+/* =========================
    SETTINGS
-========================================= */
+========================= */
 
 const MAX_GUESTS = 8;
 
 const GUEST_DURATION = 120;
 
-/*
- Gift values.
-
- Lion = 29,999.
-
- Մյուս արժեքները կարող ենք հետո
- փոխել մեկ տողով։
-*/
-
 const GIFTS = {
 
-rose:{
-value:1
-},
+    rose:{
+        value:1
+    },
 
-lion:{
-value:29999
-},
+    lion:{
+        value:29999
+    },
 
-universe:{
-value:44999
-},
+    universe:{
+        value:44999
+    },
 
-santa:{
-value:25000
-}
+    santa:{
+        value:25000
+    }
 
 };
 
-/* =========================================
+/* =========================
    STATE
-========================================= */
+========================= */
 
 let guests =
-Array(MAX_GUESTS).fill(null);
+    Array(MAX_GUESTS).fill(null);
 
 let selectedGuest = null;
 
@@ -1359,1176 +1245,1160 @@ let pendingGuestImage = null;
 
 let hostImage = null;
 
-let giftTimer = null;
+/* =========================
+   LION QUEUE
+========================= */
 
-/* =========================================
-   BROADCAST CHANNEL
-========================================= */
+let lionQueue = 0;
+
+let lionPlaying = false;
+
+/* =========================
+   OUTPUT COMMUNICATION
+========================= */
 
 const channel =
-new BroadcastChannel(
-"live_guest_studio_v2"
-);
+    new BroadcastChannel(
+        "live_guest_studio_final"
+    );
 
 const params =
-new URLSearchParams(
-location.search
-);
+    new URLSearchParams(
+        location.search
+    );
 
 const outputMode =
-params.get("mode") === "output";
+    params.get("mode") === "output";
 
 if(outputMode){
 
-document.body.classList.add(
-"output-mode"
-);
+    document.body.classList.add(
+        "output-mode"
+    );
 
 }
 
-/* =========================================
+/* =========================
    OPEN OUTPUT
-========================================= */
+========================= */
 
 function openOutputWindow(){
 
-window.open(
+    window.open(
 
-location.pathname +
-"?mode=output",
+        location.pathname +
+        "?mode=output",
 
-"liveOutput",
+        "liveOutput",
 
-"width=520,height=920"
+        "width=520,height=920"
 
-);
+    );
 
-setTimeout(
-broadcastState,
-800
-);
+    setTimeout(
+        broadcastState,
+        600
+    );
 
 }
 
-/* =========================================
-   COMMUNICATION
-========================================= */
+/* =========================
+   CHANNEL
+========================= */
 
 channel.onmessage =
 function(event){
 
-const message =
-event.data;
+    const message =
+        event.data;
 
-if(
-outputMode &&
-message.type === "state"
-){
+    if(
+        outputMode &&
+        message.type === "state"
+    ){
 
-applyRemoteState(
-message.state
-);
+        applyRemoteState(
+            message.state
+        );
 
-}
+    }
 
-if(
-outputMode &&
-message.type === "giftStage"
-){
+    if(
+        outputMode &&
+        message.type === "lion"
+    ){
 
-showGiftStage(
-message.duration,
-false
-);
+        playLionVideo(
+            false
+        );
 
-}
+    }
 
-if(
-outputMode &&
-message.type === "hideGift"
-){
+    if(
+        !outputMode &&
+        message.type === "requestState"
+    ){
 
-hideGiftStage(false);
+        broadcastState();
 
-}
-
-if(
-!outputMode &&
-message.type === "requestState"
-){
-
-broadcastState();
-
-}
+    }
 
 };
 
 if(outputMode){
 
-channel.postMessage({
-type:"requestState"
-});
+    channel.postMessage({
+        type:"requestState"
+    });
 
 }
 
-/* =========================================
+/* =========================
    STATE SYNC
-========================================= */
+========================= */
 
 function broadcastState(){
 
-if(outputMode) return;
+    if(outputMode) return;
 
-channel.postMessage({
+    channel.postMessage({
 
-type:"state",
+        type:"state",
 
-state:{
+        state:{
 
-guests,
+            guests,
 
-selectedGuest,
+            selectedGuest,
 
-hostImage
+            hostImage
 
-}
+        }
 
-});
+    });
 
 }
 
 function applyRemoteState(state){
 
-guests =
-state.guests ||
-Array(MAX_GUESTS).fill(null);
+    guests =
+        state.guests ||
+        Array(MAX_GUESTS).fill(null);
 
-selectedGuest =
-state.selectedGuest;
+    selectedGuest =
+        state.selectedGuest;
 
-hostImage =
-state.hostImage;
+    hostImage =
+        state.hostImage;
 
-renderHost();
+    renderHost();
 
-renderLiveGuests();
+    renderLiveGuests();
 
 }
 
-/* =========================================
-   HOST IMAGE
-========================================= */
+/* =========================
+   HOST
+========================= */
 
 const hostInput =
-document.getElementById(
-"hostImageInput"
-);
+    document.getElementById(
+        "hostImageInput"
+    );
 
 if(hostInput){
 
-hostInput.addEventListener(
-"change",
-function(event){
+    hostInput.addEventListener(
+        "change",
+        function(event){
 
-const file =
-event.target.files[0];
+            const file =
+                event.target.files[0];
 
-if(!file) return;
+            if(!file) return;
 
-const reader =
-new FileReader();
+            const reader =
+                new FileReader();
 
-reader.onload =
-function(e){
+            reader.onload =
+            function(e){
 
-hostImage =
-e.target.result;
+                hostImage =
+                    e.target.result;
 
-renderHost();
+                renderHost();
 
-broadcastState();
+                broadcastState();
 
-};
+            };
 
-reader.readAsDataURL(file);
+            reader.readAsDataURL(
+                file
+            );
 
-}
-);
+        }
+    );
 
 }
 
 function renderHost(){
 
-const hostContent =
-document.getElementById(
-"hostContent"
-);
+    const hostContent =
+        document.getElementById(
+            "hostContent"
+        );
 
-if(!hostContent) return;
+    if(!hostContent) return;
 
-if(!hostImage){
+    if(!hostImage){
 
-hostContent.className =
-"host-placeholder";
+        hostContent.className =
+            "host-placeholder";
 
-hostContent.innerHTML =
-"Add Host Image";
+        hostContent.innerHTML =
+            "Add Host Image";
 
-return;
+        return;
+
+    }
+
+    hostContent.className = "";
+
+    hostContent.innerHTML =
+        `<img src="${hostImage}">`;
 
 }
 
-hostContent.className = "";
-
-hostContent.innerHTML =
-`<img src="${hostImage}">`;
-
-}
-
-/* =========================================
+/* =========================
    GUEST IMAGE
-========================================= */
+========================= */
 
 const guestImageInput =
-document.getElementById(
-"guestImageInput"
-);
+    document.getElementById(
+        "guestImageInput"
+    );
 
 const guestPreview =
-document.getElementById(
-"guestPreview"
-);
+    document.getElementById(
+        "guestPreview"
+    );
 
 const guestName =
-document.getElementById(
-"guestName"
-);
+    document.getElementById(
+        "guestName"
+    );
 
 if(guestImageInput){
 
-guestImageInput.addEventListener(
-"change",
-function(event){
+    guestImageInput.addEventListener(
+        "change",
+        function(event){
 
-const file =
-event.target.files[0];
+            const file =
+                event.target.files[0];
 
-if(!file) return;
+            if(!file) return;
 
-loadGuestImage(file);
+            loadGuestImage(
+                file
+            );
 
-}
-);
+        }
+    );
 
 }
 
 function loadGuestImage(file){
 
-const reader =
-new FileReader();
+    const reader =
+        new FileReader();
 
-reader.onload =
-function(e){
+    reader.onload =
+    function(e){
 
-pendingGuestImage =
-e.target.result;
+        pendingGuestImage =
+            e.target.result;
 
-if(guestPreview){
+        if(guestPreview){
 
-guestPreview.innerHTML =
-`<img src="${pendingGuestImage}">`;
+            guestPreview.innerHTML =
+                `<img src="${pendingGuestImage}">`;
+
+        }
+
+    };
+
+    reader.readAsDataURL(
+        file
+    );
 
 }
 
-};
-
-reader.readAsDataURL(file);
-
-}
-
-/* =========================================
+/* =========================
    PASTE SCREENSHOT
-========================================= */
+========================= */
 
 document.addEventListener(
-"paste",
-function(event){
+    "paste",
+    function(event){
 
-if(outputMode) return;
+        if(outputMode) return;
 
-const items =
-event.clipboardData?.items;
+        const items =
+            event.clipboardData?.items;
 
-if(!items) return;
+        if(!items) return;
 
-for(const item of items){
+        for(
+            const item
+            of items
+        ){
 
-if(
-item.type &&
-item.type.startsWith("image/")
-){
+            if(
+                item.type &&
+                item.type.startsWith(
+                    "image/"
+                )
+            ){
 
-const file =
-item.getAsFile();
+                const file =
+                    item.getAsFile();
 
-loadGuestImage(file);
+                loadGuestImage(
+                    file
+                );
 
-break;
+                break;
 
-}
+            }
 
-}
+        }
 
-}
+    }
 );
 
-/* =========================================
+/* =========================
    ADD GUEST
-========================================= */
+========================= */
 
 function addGuest(){
 
-if(outputMode) return;
+    if(outputMode) return;
 
-const name =
-guestName.value.trim();
+    const name =
+        guestName.value.trim();
 
-if(!name){
+    if(!name){
 
-alert(
-"Enter guest name"
-);
+        alert(
+            "Enter guest name"
+        );
 
-return;
+        return;
 
-}
+    }
 
-if(!pendingGuestImage){
+    if(!pendingGuestImage){
 
-alert(
-"Choose or paste guest image"
-);
+        alert(
+            "Choose or paste guest image"
+        );
 
-return;
+        return;
 
-}
+    }
 
-const freeSlot =
-guests.findIndex(
-guest => guest === null
-);
+    const freeSlot =
+        guests.findIndex(
+            guest =>
+                guest === null
+        );
 
-if(freeSlot === -1){
+    if(freeSlot === -1){
 
-alert(
-"All 8 slots are occupied"
-);
+        alert(
+            "All 8 slots are occupied"
+        );
 
-return;
+        return;
 
-}
+    }
 
-guests[freeSlot] = {
+    guests[freeSlot] = {
 
-name:name,
+        name:name,
 
-image:pendingGuestImage,
+        image:
+            pendingGuestImage,
 
-score:0,
+        score:0,
 
-expiresAt:
-Date.now() +
-GUEST_DURATION * 1000
+        expiresAt:
+            Date.now() +
+            GUEST_DURATION * 1000
 
-};
+    };
 
-selectedGuest =
-freeSlot;
+    selectedGuest =
+        freeSlot;
 
-guestName.value = "";
+    guestName.value = "";
 
-guestImageInput.value = "";
+    guestImageInput.value = "";
 
-pendingGuestImage = null;
+    pendingGuestImage = null;
 
-guestPreview.innerHTML =
-"AVATAR";
+    guestPreview.innerHTML =
+        "AVATAR";
 
-renderEverything();
+    renderEverything();
 
-broadcastState();
+    broadcastState();
 
 }
 
 const addGuestButton =
-document.getElementById(
-"addGuestButton"
-);
+    document.getElementById(
+        "addGuestButton"
+    );
 
 if(addGuestButton){
 
-addGuestButton.addEventListener(
-"click",
-addGuest
-);
+    addGuestButton.addEventListener(
+        "click",
+        addGuest
+    );
 
 }
 
 if(guestName){
 
-guestName.addEventListener(
-"keydown",
-function(event){
+    guestName.addEventListener(
+        "keydown",
+        function(event){
 
-if(event.key === "Enter"){
+            if(
+                event.key ===
+                "Enter"
+            ){
 
-addGuest();
+                addGuest();
+
+            }
+
+        }
+    );
 
 }
 
-}
-);
-
-}
-
-/* =========================================
-   SELECT GUEST
-========================================= */
+/* =========================
+   SELECT
+========================= */
 
 function selectGuest(index){
 
-if(!guests[index]) return;
+    if(!guests[index])
+        return;
 
-selectedGuest =
-index;
+    selectedGuest =
+        index;
 
-renderEverything();
+    renderEverything();
 
-broadcastState();
+    broadcastState();
 
 }
 
-/* =========================================
+/* =========================
    REMOVE
-========================================= */
+========================= */
 
 function removeGuest(index){
 
-guests[index] = null;
+    guests[index] = null;
 
-if(
-selectedGuest === index
-){
+    if(
+        selectedGuest ===
+        index
+    ){
 
-selectedGuest = null;
+        selectedGuest = null;
+
+    }
+
+    renderEverything();
+
+    broadcastState();
 
 }
 
-renderEverything();
-
-broadcastState();
-
-}
-
-/* =========================================
-   LIVE GUEST RENDER
-========================================= */
+/* =========================
+   LIVE GUESTS
+========================= */
 
 function renderLiveGuests(){
 
-const container =
-document.getElementById(
-"liveGuests"
-);
+    const container =
+        document.getElementById(
+            "liveGuests"
+        );
 
-if(!container) return;
+    if(!container) return;
 
-container.innerHTML = "";
+    container.innerHTML = "";
 
-guests.forEach(
-(guest,index)=>{
+    guests.forEach(
+        (guest,index)=>{
 
-const box =
-document.createElement(
-"div"
-);
+            const box =
+                document.createElement(
+                    "div"
+                );
 
-box.className =
-"guest";
+            box.className =
+                "guest";
 
-if(
-guest &&
-selectedGuest === index
-){
+            if(
+                guest &&
+                selectedGuest === index
+            ){
 
-box.classList.add(
-"selected"
-);
+                box.classList.add(
+                    "selected"
+                );
+
+            }
+
+            if(!guest){
+
+                box.innerHTML = `
+
+                    <div class="guest-empty">
+
+                        <div class="empty-plus">
+                            +
+                        </div>
+
+                        <div>
+                            Request
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            else{
+
+                box.innerHTML = `
+
+                    <img src="${guest.image}">
+
+                    <div class="guest-score">
+
+                        <span class="score-icon">
+                            ◆
+                        </span>
+
+                        <span>
+                            ${Number(
+                                guest.score
+                            ).toLocaleString()}
+                        </span>
+
+                    </div>
+
+                    <div class="guest-name">
+
+                        ${escapeHTML(
+                            guest.name
+                        )}
+
+                        <span class="guest-plus">
+                            +
+                        </span>
+
+                    </div>
+
+                    <div class="guest-muted">
+                        ♫̸
+                    </div>
+
+                `;
+
+            }
+
+            container.appendChild(
+                box
+            );
+
+        }
+    );
 
 }
 
-if(!guest){
-
-box.innerHTML = `
-
-<div class="guest-empty">
-
-<div class="empty-plus">
-+
-</div>
-
-<div>
-Request
-</div>
-
-</div>
-
-`;
-
-}
-
-else{
-
-box.innerHTML = `
-
-<img src="${guest.image}">
-
-<div class="guest-score">
-
-<span class="score-icon">
-◆
-</span>
-
-<span>
-${Number(
-guest.score
-).toLocaleString()}
-</span>
-
-</div>
-
-<div class="guest-name">
-
-${escapeHTML(
-guest.name
-)}
-
-<span class="guest-plus">
-+
-</span>
-
-</div>
-
-<div class="guest-muted">
-🎙̸
-</div>
-
-`;
-
-}
-
-container.appendChild(
-box
-);
-
-}
-);
-
-}
-
-/* =========================================
-   CONTROL SLOT RENDER
-========================================= */
+/* =========================
+   CONTROL SLOTS
+========================= */
 
 function renderControlSlots(){
 
-const container =
-document.getElementById(
-"controlSlots"
-);
+    const container =
+        document.getElementById(
+            "controlSlots"
+        );
 
-if(!container) return;
+    if(!container) return;
 
-container.innerHTML = "";
+    container.innerHTML = "";
 
-guests.forEach(
-(guest,index)=>{
+    guests.forEach(
+        (guest,index)=>{
 
-const card =
-document.createElement(
-"div"
-);
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-card.className =
-"slot-card";
+            card.className =
+                "slot-card";
 
-if(
-selectedGuest === index
-){
+            if(
+                selectedGuest === index
+            ){
 
-card.classList.add(
-"active"
-);
+                card.classList.add(
+                    "active"
+                );
+
+            }
+
+            if(!guest){
+
+                card.innerHTML = `
+
+                    <div class="slot-top">
+
+                        <span class="slot-number">
+                            SLOT ${index + 1}
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="slot-person"
+                        style="color:#555"
+                    >
+                        EMPTY
+                    </div>
+
+                `;
+
+            }
+
+            else{
+
+                const timeLeft =
+                    Math.max(
+
+                        0,
+
+                        Math.ceil(
+
+                            (
+                                guest.expiresAt -
+                                Date.now()
+                            ) / 1000
+
+                        )
+
+                    );
+
+                card.innerHTML = `
+
+                    <div class="slot-top">
+
+                        <span class="slot-number">
+                            SLOT ${index + 1}
+                        </span>
+
+                        <span class="timer">
+                            ${formatTime(
+                                timeLeft
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="slot-person">
+
+                        ${escapeHTML(
+                            guest.name
+                        )}
+
+                    </div>
+
+                    <div class="slot-actions">
+
+                        <button
+                            onclick="selectGuest(${index})"
+                        >
+                            SELECT
+                        </button>
+
+                        <button
+                            class="danger"
+                            onclick="removeGuest(${index})"
+                        >
+                            REMOVE
+                        </button>
+
+                    </div>
+
+                `;
+
+            }
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
 
-if(!guest){
-
-card.innerHTML = `
-
-<div class="slot-top">
-
-<span class="slot-number">
-SLOT ${index + 1}
-</span>
-
-</div>
-
-<div
-class="slot-person"
-style="color:#555"
->
-EMPTY
-</div>
-
-`;
-
-}
-
-else{
-
-const timeLeft =
-Math.max(
-
-0,
-
-Math.ceil(
-
-(
-guest.expiresAt -
-Date.now()
-) / 1000
-
-)
-
-);
-
-card.innerHTML = `
-
-<div class="slot-top">
-
-<span class="slot-number">
-SLOT ${index + 1}
-</span>
-
-<span class="timer">
-${formatTime(timeLeft)}
-</span>
-
-</div>
-
-<div class="slot-person">
-${escapeHTML(guest.name)}
-</div>
-
-<div class="slot-actions">
-
-<button
-onclick="selectGuest(${index})"
->
-SELECT
-</button>
-
-<button
-class="danger"
-onclick="removeGuest(${index})"
->
-REMOVE
-</button>
-
-</div>
-
-`;
-
-}
-
-container.appendChild(
-card
-);
-
-}
-);
-
-}
-
-/* =========================================
+/* =========================
    SELECTED INFO
-========================================= */
+========================= */
 
 function renderSelectedInfo(){
 
-const info =
-document.getElementById(
-"selectedInfo"
-);
+    const info =
+        document.getElementById(
+            "selectedInfo"
+        );
 
-if(!info) return;
+    if(!info) return;
 
-if(
-selectedGuest === null ||
-!guests[selectedGuest]
-){
+    if(
+        selectedGuest === null ||
+        !guests[selectedGuest]
+    ){
 
-info.textContent =
-"Selected guest: none";
+        info.textContent =
+            "Selected guest: none";
 
-return;
+        return;
+
+    }
+
+    info.textContent =
+        "Selected: " +
+        guests[selectedGuest].name +
+        " — Slot " +
+        (selectedGuest + 1);
 
 }
 
-info.textContent =
-"Selected: " +
-guests[selectedGuest].name +
-" — Slot " +
-(selectedGuest + 1);
-
-}
-
-/* =========================================
+/* =========================
    SEND GIFT
-========================================= */
+========================= */
 
 function sendGift(type){
 
-  if(outputMode) return;
+    if(outputMode) return;
 
-  if(
-    selectedGuest === null ||
-    !guests[selectedGuest]
-  ){
-    alert("First select a guest");
-    return;
-  }
+    if(
+        selectedGuest === null ||
+        !guests[selectedGuest]
+    ){
 
-  const gift = GIFTS[type];
+        alert(
+            "First select a guest"
+        );
 
-  if(!gift) return;
+        return;
 
-  // Add gift value to selected guest
-  guests[selectedGuest].score += gift.value;
+    }
 
-  renderEverything();
-  broadcastState();
+    const gift =
+        GIFTS[type];
 
-  // LION
-  if(type === "lion"){
+    if(!gift) return;
 
-    playLionVideo();
+    /*
+      Score changes immediately
+      with EVERY click.
+    */
 
-  }
+    guests[selectedGuest].score +=
+        gift.value;
+
+    renderEverything();
+
+    broadcastState();
+
+    /*
+      Lion video
+    */
+
+    if(type === "lion"){
+
+        playLionVideo(
+            true
+        );
+
+    }
 
 }
 
+/* =========================
+   LION QUEUE
+========================= */
 
-/* =========================================
-   PLAY LION VIDEO
-========================================= */
+function playLionVideo(
+    notifyOutput = true
+){
 
-function playLionVideo(){
+    /*
+      Every click adds ONE
+      Lion to the queue.
+    */
 
-  const comments =
-    document.getElementById("comments");
+    lionQueue++;
 
-  const stage =
-    document.getElementById("giftStage");
+    /*
+      Tell clean output window
+      to queue one Lion too.
+    */
 
-  if(!stage) return;
+    if(
+        notifyOutput &&
+        !outputMode
+    ){
 
-  // Hide comments
-  if(comments){
-    comments.classList.add("hidden");
-  }
+        channel.postMessage({
+            type:"lion"
+        });
 
-  // Remove TikFinity iframe from this area
-  stage.innerHTML = "";
+    }
 
-  // Create Lion video
-  const video =
-    document.createElement("video");
+    /*
+      If Lion is already playing,
+      DO NOT restart it.
+    */
 
-  video.src =
-    encodeURI("0818 (1).mp4");
+    if(lionPlaying){
 
-  video.autoplay = true;
-  video.playsInline = true;
+        return;
 
-  /*
-    Եթե քո MP4-ն իր ձայնն ունի,
-    սա թող false:
-  */
-  video.muted = false;
+    }
 
-  video.style.width = "100%";
-  video.style.height = "100%";
-  video.style.objectFit = "cover";
-  video.style.display = "block";
+    playNextLion();
 
-  stage.appendChild(video);
+}
 
-  stage.classList.add("active");
+/* =========================
+   PLAY NEXT LION
+========================= */
 
-  video.play().catch(function(error){
-    console.error("Lion video error:", error);
-  });
+function playNextLion(){
 
-  // When video ends, return comments
-  video.onended = function(){
+    if(lionQueue <= 0){
 
-    stage.classList.remove("active");
+        lionPlaying = false;
+
+        return;
+
+    }
+
+    lionPlaying = true;
+
+    lionQueue--;
+
+    const comments =
+        document.getElementById(
+            "comments"
+        );
+
+    const stage =
+        document.getElementById(
+            "giftStage"
+        );
+
+    if(!stage){
+
+        lionPlaying = false;
+
+        return;
+
+    }
+
+    if(comments){
+
+        comments.classList.add(
+            "hidden"
+        );
+
+    }
 
     stage.innerHTML = "";
 
-    if(comments){
-      comments.classList.remove("hidden");
-    }
+    const video =
+        document.createElement(
+            "video"
+        );
 
-  };
+    /*
+      Lion video uploaded
+      to GitHub repository.
+    */
 
-}
-/* =========================================
-   GIFT STAGE
-========================================= */
+    video.src =
+        "./0818%20(1).mp4";
 
-function showGiftStage(
-duration = 12000,
-notify = true
-){
+    video.autoplay = true;
 
-const stage =
-document.getElementById(
-"giftStage"
-);
+    video.playsInline = true;
 
-const comments =
-document.getElementById(
-"comments"
-);
+    video.muted = false;
 
-if(!stage || !comments)
-return;
+    video.preload =
+        "auto";
 
-clearTimeout(
-giftTimer
-);
+    video.style.width =
+        "100%";
 
-comments.classList.add(
-"hidden"
-);
+    video.style.height =
+        "100%";
 
-stage.classList.add(
-"active"
-);
+    video.style.objectFit =
+        "cover";
 
-if(
-notify &&
-!outputMode
-){
+    video.style.display =
+        "block";
 
-channel.postMessage({
+    stage.appendChild(
+        video
+    );
 
-type:"giftStage",
+    stage.classList.add(
+        "active"
+    );
 
-duration:duration
+    video.play().catch(
+        function(error){
 
-});
+            console.error(
+                "Lion video error:",
+                error
+            );
 
-}
+        }
+    );
 
-giftTimer =
-setTimeout(
-function(){
+    /*
+      When current Lion ends:
+      play next Lion if queued.
+    */
 
-hideGiftStage();
+    video.onended =
+    function(){
 
-},
-duration
-);
+        stage.innerHTML = "";
 
-}
+        if(lionQueue > 0){
 
-/* =========================================
-   HIDE GIFT
-========================================= */
+            playNextLion();
 
-function hideGiftStage(
-notify = true
-){
+        }
 
-clearTimeout(
-giftTimer
-);
+        else{
 
-const stage =
-document.getElementById(
-"giftStage"
-);
+            lionPlaying = false;
 
-const comments =
-document.getElementById(
-"comments"
-);
+            stage.classList.remove(
+                "active"
+            );
 
-if(stage){
+            if(comments){
 
-stage.classList.remove(
-"active"
-);
+                comments.classList.remove(
+                    "hidden"
+                );
+
+            }
+
+        }
+
+    };
 
 }
 
-if(comments){
-
-comments.classList.remove(
-"hidden"
-);
-
-}
-
-if(
-notify &&
-!outputMode
-){
-
-channel.postMessage({
-type:"hideGift"
-});
-
-}
-
-}
-
-/* =========================================
-   COMMENTS
-========================================= */
-
-function addComment(){
-
-const input =
-document.getElementById(
-"commentInput"
-);
-
-const comments =
-document.getElementById(
-"comments"
-);
-
-if(!input || !comments)
-return;
-
-const text =
-input.value.trim();
-
-if(!text) return;
-
-const div =
-document.createElement(
-"div"
-);
-
-div.className =
-"comment";
-
-div.innerHTML = `
-
-<div class="comment-avatar">
-U
-</div>
-
-<div class="comment-text">
-
-<span class="comment-user">
-Guest
-</span>
-
-<br>
-
-${escapeHTML(text)}
-
-</div>
-
-`;
-
-comments.appendChild(
-div
-);
-
-while(
-comments.children.length > 5
-){
-
-comments.removeChild(
-comments.firstChild
-);
-
-}
-
-input.value = "";
-
-}
-
-/* =========================================
-   AUTO REMOVE TIMER
-========================================= */
+/* =========================
+   AUTO REMOVE
+========================= */
 
 setInterval(
-function(){
+    function(){
 
-if(outputMode) return;
+        if(outputMode)
+            return;
 
-let changed = false;
+        let changed =
+            false;
 
-guests.forEach(
-(guest,index)=>{
+        guests.forEach(
+            (guest,index)=>{
 
-if(!guest) return;
+                if(!guest)
+                    return;
 
-if(
-Date.now() >=
-guest.expiresAt
-){
+                if(
+                    Date.now() >=
+                    guest.expiresAt
+                ){
 
-guests[index] = null;
+                    guests[index] =
+                        null;
 
-if(
-selectedGuest === index
-){
+                    if(
+                        selectedGuest ===
+                        index
+                    ){
 
-selectedGuest = null;
+                        selectedGuest =
+                            null;
 
-}
+                    }
 
-changed = true;
+                    changed =
+                        true;
 
-}
+                }
 
-}
+            }
+        );
+
+        renderControlSlots();
+
+        if(changed){
+
+            renderEverything();
+
+            broadcastState();
+
+        }
+
+    },
+    500
 );
 
-renderControlSlots();
-
-if(changed){
-
-renderEverything();
-
-broadcastState();
-
-}
-
-},
-500
-);
-
-/* =========================================
-   KEYBOARD SHORTCUT
-========================================= */
+/* =========================
+   HOTKEYS
+========================= */
 
 document.addEventListener(
-"keydown",
-function(event){
+    "keydown",
+    function(event){
 
-if(outputMode) return;
+        if(outputMode)
+            return;
 
-if(
-document.activeElement &&
-document.activeElement.tagName ===
-"INPUT"
-){
+        if(
+            document.activeElement &&
+            document.activeElement.tagName ===
+            "INPUT"
+        ){
 
-return;
+            return;
 
-}
+        }
 
-const number =
-Number(event.key);
+        const number =
+            Number(
+                event.key
+            );
 
-if(
-number >= 1 &&
-number <= 8
-){
+        if(
+            number >= 1 &&
+            number <= 8
+        ){
 
-selectGuest(
-number - 1
+            selectGuest(
+                number - 1
+            );
+
+        }
+
+    }
 );
 
-}
-
-}
-);
-
-/* =========================================
+/* =========================
    HELPERS
-========================================= */
+========================= */
 
 function formatTime(seconds){
 
-const min =
-Math.floor(
-seconds / 60
-);
+    const min =
+        Math.floor(
+            seconds / 60
+        );
 
-const sec =
-seconds % 60;
+    const sec =
+        seconds % 60;
 
-return (
+    return(
 
-String(min).padStart(
-2,
-"0"
-)
+        String(min).padStart(
+            2,
+            "0"
+        )
 
-+
+        +
 
-":"
+        ":"
 
-+
+        +
 
-String(sec).padStart(
-2,
-"0"
-)
+        String(sec).padStart(
+            2,
+            "0"
+        )
 
-);
+    );
 
 }
 
 function escapeHTML(text){
 
-const div =
-document.createElement(
-"div"
-);
+    const div =
+        document.createElement(
+            "div"
+        );
 
-div.textContent =
-text;
+    div.textContent =
+        text;
 
-return div.innerHTML;
+    return div.innerHTML;
 
 }
 
-/* =========================================
-   RENDER ALL
-========================================= */
+/* =========================
+   RENDER
+========================= */
 
 function renderEverything(){
 
-renderHost();
+    renderHost();
 
-renderLiveGuests();
+    renderLiveGuests();
 
-renderControlSlots();
+    renderControlSlots();
 
-renderSelectedInfo();
+    renderSelectedInfo();
 
 }
 
@@ -2537,4 +2407,5 @@ renderEverything();
 </script>
 
 </body>
+
 </html>
