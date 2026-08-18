@@ -2100,50 +2100,101 @@ guests[selectedGuest].name +
 
 function sendGift(type){
 
-if(outputMode) return;
+  if(outputMode) return;
 
-if(
-selectedGuest === null ||
-!guests[selectedGuest]
-){
+  if(
+    selectedGuest === null ||
+    !guests[selectedGuest]
+  ){
+    alert("First select a guest");
+    return;
+  }
 
-alert(
-"First select a guest"
-);
+  const gift = GIFTS[type];
 
-return;
+  if(!gift) return;
 
-}
+  // Add gift value to selected guest
+  guests[selectedGuest].score += gift.value;
 
-const gift =
-GIFTS[type];
+  renderEverything();
+  broadcastState();
 
-if(!gift) return;
+  // LION
+  if(type === "lion"){
 
-/*
- Add gift value to selected guest
-*/
+    playLionVideo();
 
-guests[selectedGuest].score +=
-gift.value;
-
-renderEverything();
-
-broadcastState();
-
-/*
- Show bottom gift area.
-
- TikFinity itself plays the actual
- video when its Action is triggered.
-*/
-
-showGiftStage(
-12000
-);
+  }
 
 }
 
+
+/* =========================================
+   PLAY LION VIDEO
+========================================= */
+
+function playLionVideo(){
+
+  const comments =
+    document.getElementById("comments");
+
+  const stage =
+    document.getElementById("giftStage");
+
+  if(!stage) return;
+
+  // Hide comments
+  if(comments){
+    comments.classList.add("hidden");
+  }
+
+  // Remove TikFinity iframe from this area
+  stage.innerHTML = "";
+
+  // Create Lion video
+  const video =
+    document.createElement("video");
+
+  video.src =
+    encodeURI("0818 (1).mp4");
+
+  video.autoplay = true;
+  video.playsInline = true;
+
+  /*
+    Եթե քո MP4-ն իր ձայնն ունի,
+    սա թող false:
+  */
+  video.muted = false;
+
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  video.style.display = "block";
+
+  stage.appendChild(video);
+
+  stage.classList.add("active");
+
+  video.play().catch(function(error){
+    console.error("Lion video error:", error);
+  });
+
+  // When video ends, return comments
+  video.onended = function(){
+
+    stage.classList.remove("active");
+
+    stage.innerHTML = "";
+
+    if(comments){
+      comments.classList.remove("hidden");
+    }
+
+  };
+
+}
 /* =========================================
    GIFT STAGE
 ========================================= */
